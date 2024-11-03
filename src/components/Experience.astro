@@ -1,0 +1,28 @@
+---
+import ExperienceItem from "./ExperienceItem.astro"
+
+const EXPERIENCE = [
+    {
+        title: 'Desarrollador de Software (Proyectos Académicos) - Universidad de Los Lagos.',
+        date: 'Marzo 2020 - Presente',
+        description: 'Desarrollo de soluciones de software para varios proyectos académicos, enfocándome en crear aplicaciones que resuelvan problemas reales o me introduzcan a una nueva tecnologia.'
+    },
+    {
+        title: 'Desarrollador Full Stack - Cafetería Panichini, Puerto Montt',
+        date: 'Septiembre 2024 - Diciembre 2024',
+        description: 'Creación e implementación de un sistema de gestión de archivos en la nube para optimizar la organización de documentos del personal, utilizando OneDrive y Microsoft Graph API.'
+    },
+    {
+        title: 'Encargado de Aseguramiento de Calidad (QA) - Sotex S.P.A.',
+        date: 'Agosto 2023 - Junio 2024',
+        description: 'Responsable de la calidad del software desarrollado por el equipo, enfocándome en pruebas funcionales y la validación de requerimientos.'
+    }
+]
+---
+<ol class="">  
+    {EXPERIENCE.map(experience => (
+        <li class="mb-10">    
+            <ExperienceItem {...experience} />
+        </li>))
+    }
+</ol>

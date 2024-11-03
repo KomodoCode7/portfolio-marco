@@ -1,0 +1,83 @@
+---
+import Nextjs from "./icons/Nextjs.astro"
+import Tailwind from "./icons/Tailwind.astro"
+import Javascript from "./icons/Javascript.astro"
+import Typescript from "./icons/Typescript.astro"
+import Openai from "./icons/Openai.astro"
+import Prisma from "./icons/Prisma.astro"
+const TAGS = {
+    NEXT: {
+        name: "Next.Js",
+        color: "bg-black text-white",
+        icon: Nextjs 
+    },
+    TAILWIND: {
+        name: "TailwindCSS",
+        color: "bg-blue-600 text-white",
+        icon: Tailwind
+    },
+    JAVASCRIPT: {
+        name: "JavaScript",
+        color: "bg-yellow-400 text-black",
+        icon: Javascript
+    },
+    TYPESCRIPT: {
+        name: "TypeScript",
+        color: "bg-white text-blue-500",
+        icon: Typescript
+    },
+    OPENAI: {
+        name: "OpenAi API",
+        color: "bg-green-500 text-white",
+        icon: Openai
+    },
+    PRISMA: {
+        name: "Prisma",
+        color: "bg-white text-black",
+        icon: Prisma
+    }
+}
+const PROJECTS = [
+    {title: "Dr. Computín - Asistente Virtual para Problemas de Hardware",
+    description: `Desarrollado con Next.js, TailwindCSS y la API de OpenAI,
+     Dr. Computín es una aplicación web diseñada para ayudar a usuarios con problemas de hardware 
+     en sus computadoras. Utilizando la inteligencia artificial de OpenAI, Dr. Computín 
+     ofrece asistencia y diagnósticos preliminares. Además, permite al usuario generar un resumen de su problema,
+     que puede compartir con un técnico de confianza para facilitar la reparación.`,
+        link: "https://example.com",
+        image: "/DrComputin.jpg",
+        tags: [TAGS.NEXT, TAGS.TAILWIND, TAGS.OPENAI, TAGS.TYPESCRIPT, TAGS.PRISMA],
+    },
+]
+---
+
+{
+    PROJECTS.map(({ title, description, link, image, tags }) => (
+        <div class="mb-10">
+            <article>
+                <h3 class="text-2xl font-semibold text-yellow-400/80">{title}</h3>
+                <p class="text-lg mb-4 text-pretty">{description}</p>
+                {/* <a href={link} target="_blank" rel="noopener" class="text-blue-500 hover:underline">
+                    {link}
+                </a> */}
+                <div class="flex gap-x-2 mt-2">
+                    <ul class="flex gap-x-2 flex-row">
+                        {tags.map(tag => (
+                        <li>
+                            
+                            <span 
+                            class={`flex gap-x-2 rounded-full text-sm font-medium ${tag.color} py-1 px-2 border-2 border-white/50 mb-5 hover:scale-110 transition-transform`}>
+                                <tag.icon class="size-6"/>
+                                {tag.name}
+                            </span>
+                        </li>
+                    ))}
+                    </ul>
+                    
+                </div>
+                <img src={image} alt={title} class="rounded shadow-2xl shadow-white/10 hover:scale-105 transition-transform" />
+            </article>
+            
+        </div>
+    ))
+}
