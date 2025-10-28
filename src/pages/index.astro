@@ -11,80 +11,361 @@ import Javascript from '../components/icons/Javascript.astro';
 import Typescript from '../components/icons/Typescript.astro';
 import SocialPill from '../components/SocialPill.astro';
 import Gmail from '../components/icons/Gmail.astro';
-import Experience from '../components/Experience.astro';
 import SectionContainer from '../components/SectionContainer.astro';
-import SuitCase from '../components/icons/SuitCase.astro';
 import Code from '../components/icons/Code.astro';
 import Projects from '../components/Projects.astro';
+import Architecture from '../components/Architecture.astro';
+import ArchitectureIcon from '../components/icons/Architecture.astro';
+import TechStack from '../components/TechStack.astro';
+import Timeline from '../components/Timeline.astro';
+import ValueProposition from '../components/ValueProposition.astro';
+import ImpactMetrics from '../components/ImpactMetrics.astro';
+import StackIcon from '../components/icons/Stack.astro';
+import TimelineIcon from '../components/icons/Timeline.astro';
+import ValueIcon from '../components/icons/Value.astro';
 ---
 
 <Layout 
-title="Portafolio de Marco Molina - Desarrollador y Programador Web"
-description="Conoce a Marco Molina, un desarrollador web de Puerto Montt, Chile. Finalizando Ingeniería Civil en Informática en la Universidad de Los Lagos."
+title="Marco Molina - Ingeniero Civil Informático | Desarrollador Full Stack"
+description="Ingeniero Civil Informático titulado (2025) con experiencia desde 2023 en desarrollo full stack, herramientas cloud y sistemas empresariales. NestJS, Next.js, PostgreSQL, Cloud Run."
 >
 	<main class="px-4">
-		<SectionContainer id="top" class="py-20 pb-20">
+		<SectionContainer id="top" class="py-16 pb-32">
 			
-			<h1 class="justify-start items-center text-4xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-yellow-400 to-red-500 flex flex-row gap-x-4 sm:gap-x-8 pb-4">
-				<div class="flex gap-x-4 items-center">
-					<picture class="rounded-full size-28 overflow-hidden block hover:scale-110 transition-transform duration-300">
-						<img 
-						class="" 
-						src="./1737652467921.jpeg" 
-						alt="marco photo"
-						>
-					</picture>
-					<h1 class="text-4xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 via-yellow-400 to-red-500">
-						¡Hola! Soy Marco Molina,
-					</h1>
-				</div>
-				
-				<div class="flex justify-start items-start">
-					<a href="https://www.linkedin.com/in/marco-molina-b0199a214/" target="_blank" rel="noopener">
-						<Badge>Disponible</Badge>
-					</a>
-				</div>
-			</h1>
-			<h2 class="text-xl font-semibold">
-				Desarrollador Web | Puerto Montt / Osorno, Chile 🇨🇱
-			</h2>
-			<p class="text-lg text-wrap max-w-[800px]">
-				Finalizando <span class="text-yellow-200/90">Ingeniería Civil en Informática en la Universidad de Los Lagos,</span>
-				apasionado por <span class="text-red-300/90">crear soluciones de software</span> creativas y eficientes. 
-				<span class="text-cyan-300/80">Además, soy un entusiasta de la</span><span class="font-extrabold bg-clip-text text-transparent bg-[linear-gradient(to_right,theme(colors.red.400),theme(colors.blue.300),theme(colors.yellow.400),theme(colors.red.400),theme(colors.blue.300),theme(colors.yellow.400))] bg-[length:200%_auto] animate-gradient"> tecnología y la programación.</span>
-			</p>
+			<!-- CV-Style Hero Section -->
+			<div class="max-w-[1200px] mx-auto hero-container">
+				<div class="grid md:grid-cols-[300px_1fr] gap-8 md:gap-12 items-start">
+					
+					<!-- Foto y Badge (Izquierda) -->
+					<div class="flex flex-col gap-6 items-center md:items-start hero-left">
+						<picture class="hero-photo rounded-2xl overflow-hidden block w-full max-w-[280px] shadow-2xl shadow-cyan-500/20 border-2 border-white/10">
+							<img 
+								class="w-full h-auto" 
+								src="./1737652467921.jpeg" 
+								alt="Marco Molina - Ingeniero Civil Informático"
+							>
+						</picture>
+						
+						<a href="https://www.linkedin.com/in/marco-molina-b0199a214/" target="_blank" rel="noopener" class="w-full hero-badge">
+							<div class="w-full bg-green-500/20 border border-green-500/40 rounded-lg px-4 py-3 text-center hover:bg-green-500/30 transition-all">
+								<div class="flex items-center justify-center gap-2">
+									<div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+									<span class="text-green-400 font-semibold text-sm">Disponible para nuevos proyectos</span>
+								</div>
+							</div>
+						</a>
 
-			<nav class="flex gap-x-2 mt-4 text-black/70">
-				<SocialPill href="https://www.linkedin.com/in/marco-molina-b0199a214/">
-					<Linkedin class="w-6 h-6" />
-					<span class="text-xs">Linkedin</span>
-				</SocialPill>
-				<SocialPill href="https://github.com/olawas">
-					<Github class="w-6 h-6" />
-					<span class="text-xs">Github</span>
-				</SocialPill>
-				<SocialPill href="mailto:marcoantonio.molina2001@gmail.com">
-					<Gmail class="w-6 h-6" />
-					<span class="text-xs">Gmail</span>
-				</SocialPill>
-			</nav>
+						<!-- Contacto Directo -->
+						<div class="w-full space-y-3 hero-contact">
+							<a href="https://www.linkedin.com/in/marco-molina-b0199a214/" target="_blank" rel="noopener" class="flex items-center gap-3 text-sm text-white/80 hover:text-cyan-400 transition-colors">
+								<Linkedin class="w-5 h-5 text-cyan-400" />
+								<span>LinkedIn</span>
+							</a>
+							<a href="https://github.com/olawas" target="_blank" rel="noopener" class="flex items-center gap-3 text-sm text-white/80 hover:text-cyan-400 transition-colors">
+								<Github class="w-5 h-5 text-cyan-400" />
+								<span>GitHub</span>
+							</a>
+							<a href="mailto:marcoantonio.molina2001@gmail.com" class="flex items-center gap-3 text-sm text-white/80 hover:text-cyan-400 transition-colors">
+								<Gmail class="w-5 h-5 text-cyan-400" />
+								<span>Email</span>
+							</a>
+						</div>
+					</div>
+
+					<!-- Información Profesional (Derecha) -->
+					<div class="flex flex-col gap-6 hero-right">
+						
+						<!-- Nombre y Título -->
+						<div class="hero-title border-l-4 border-cyan-500 pl-6">
+							<h1 class="text-5xl md:text-6xl font-bold text-white mb-3">
+								Marco Molina
+							</h1>
+							<h2 class="text-2xl md:text-3xl font-semibold text-cyan-400 mb-4">
+								Ingeniero Civil Informático
+							</h2>
+							<p class="text-lg text-white/70">
+								Desarrollador Full Stack | Especialista en Cloud
+							</p>
+						</div>
+
+						<!-- Datos Clave -->
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 hero-cards">
+							<div class="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-3 border border-white/10">
+								<span class="text-2xl">🇨🇱</span>
+								<div>
+									<p class="text-xs text-white/50 uppercase tracking-wide">Ubicación</p>
+									<p class="text-sm font-medium text-white">Puerto Montt / Osorno, Chile</p>
+								</div>
+							</div>
+							<div class="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-3 border border-white/10">
+								<span class="text-2xl">🎓</span>
+								<div>
+									<p class="text-xs text-white/50 uppercase tracking-wide">Titulación</p>
+									<p class="text-sm font-medium text-white">Agosto 2025 - ULagos</p>
+								</div>
+							</div>
+							<div class="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-3 border border-white/10">
+								<span class="text-2xl">💼</span>
+								<div>
+									<p class="text-xs text-white/50 uppercase tracking-wide">Posición Actual</p>
+									<p class="text-sm font-medium text-white">Desarrollador Principal - ST Consultores</p>
+								</div>
+							</div>
+							<div class="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-3 border border-white/10">
+								<span class="text-2xl">📊</span>
+								<div>
+									<p class="text-xs text-white/50 uppercase tracking-wide">Experiencia Laboral</p>
+									<p class="text-sm font-medium text-white">Desde 2023 (3er año de la carrera)</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- Resumen Profesional -->
+						<div class="hero-summary bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-xl p-6">
+							<h3 class="text-sm font-bold text-cyan-400 uppercase tracking-wide mb-3">Perfil Profesional</h3>
+							<p class="text-base text-white/90 leading-relaxed mb-4">
+								Ingeniero Civil Informático titulado con <strong>experiencia laboral desde 2023</strong> 
+								(comenzando como Analista de Datos y QA Engineer). Especializado en <strong>desarrollo full stack</strong> 
+								con tecnologías cloud (NestJS, Next.js, PostgreSQL/Neon, Cloud Run), diseño de sistemas escalables 
+								y optimización de infraestructura.
+							</p>
+							<p class="text-sm text-white/70 leading-relaxed">
+								Mi trayectoria incluye: análisis de datos, aseguramiento de calidad (pruebas de caja negra), 
+								desarrollo backend/frontend, y deployment de aplicaciones en entornos cloud. Enfocado en crear 
+								soluciones eficientes que equilibren funcionalidad, rendimiento y costos operativos.
+							</p>
+						</div>
+
+						<!-- Métricas Clave -->
+						<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 hero-metrics">
+							<div class="text-center">
+								<div class="metric-value text-4xl font-bold text-cyan-400 mb-1" data-target="2">0</div>
+								<div class="text-xs text-white/60 leading-tight">Años de Experiencia</div>
+							</div>
+							<div class="text-center">
+								<div class="metric-value text-4xl font-bold text-green-400 mb-1" data-target="4">0</div>
+								<div class="text-xs text-white/60 leading-tight">Proyectos Completados</div>
+							</div>
+							<div class="text-center">
+								<div class="metric-value text-4xl font-bold text-yellow-400 mb-1" data-target="3">0</div>
+								<div class="text-xs text-white/60 leading-tight">Roles en la Industria</div>
+							</div>
+							<div class="text-center">
+								<div class="text-4xl font-bold text-purple-400 mb-1">2025</div>
+								<div class="text-xs text-white/60 leading-tight">Titulado</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<!-- GSAP Animation Script for Hero Section -->
+			<script>
+				import { gsap } from 'gsap';
+
+				document.addEventListener('DOMContentLoaded', () => {
+					// Timeline maestra para coordinar todas las animaciones
+					const masterTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+					// 1. Animación de la foto (fade in con escala)
+					gsap.set('.hero-photo', { opacity: 0, scale: 0.9 });
+					masterTl.to('.hero-photo', {
+						opacity: 1,
+						scale: 1,
+						duration: 0.8,
+						ease: 'back.out(1.2)',
+					});
+
+					// 2. Badge de disponibilidad (desde abajo)
+					gsap.set('.hero-badge', { opacity: 0, y: 20 });
+					masterTl.to('.hero-badge', {
+						opacity: 1,
+						y: 0,
+						duration: 0.6,
+					}, '-=0.4');
+
+					// 3. Contacto (cascada)
+					gsap.set('.hero-contact a', { opacity: 0, x: -20 });
+					masterTl.to('.hero-contact a', {
+						opacity: 1,
+						x: 0,
+						duration: 0.5,
+						stagger: 0.1,
+					}, '-=0.3');
+
+					// 4. Título y subtítulo (reveal desde izquierda)
+					gsap.set('.hero-title h1, .hero-title h2, .hero-title p', { opacity: 0, x: -30 });
+					masterTl.to('.hero-title h1', {
+						opacity: 1,
+						x: 0,
+						duration: 0.7,
+					}, '-=0.5');
+
+					masterTl.to('.hero-title h2', {
+						opacity: 1,
+						x: 0,
+						duration: 0.7,
+					}, '-=0.5');
+
+					masterTl.to('.hero-title p', {
+						opacity: 1,
+						x: 0,
+						duration: 0.6,
+					}, '-=0.4');
+
+					// 5. Cards de datos clave (stagger desde arriba)
+					gsap.set('.hero-cards > div', { opacity: 0, y: 30 });
+					masterTl.to('.hero-cards > div', {
+						opacity: 1,
+						y: 0,
+						duration: 0.6,
+						stagger: 0.1,
+					}, '-=0.4');
+
+					// 6. Resumen profesional (fade in con escala)
+					gsap.set('.hero-summary', { opacity: 0, scale: 0.95 });
+					masterTl.to('.hero-summary', {
+						opacity: 1,
+						scale: 1,
+						duration: 0.7,
+					}, '-=0.3');
+
+					// 7. Métricas con animación de contador
+					const metrics = document.querySelectorAll('.metric-value');
+					gsap.set(metrics, { opacity: 0, y: 20 });
+					
+					masterTl.to(metrics, {
+						opacity: 1,
+						y: 0,
+						duration: 0.6,
+						stagger: 0.15,
+						onStart: () => {
+							// Animar los contadores
+							metrics.forEach((metric) => {
+								const target = parseInt(metric.getAttribute('data-target') || '0');
+								const obj = { value: 0 };
+								
+								gsap.to(obj, {
+									value: target,
+									duration: 1.5,
+									ease: 'power2.out',
+									onUpdate: () => {
+										metric.textContent = Math.round(obj.value).toString();
+									},
+									onComplete: () => {
+										metric.textContent = target + '+';
+									}
+								});
+							});
+						}
+					}, '-=0.2');
+
+					// Hover effects para las cards
+					const cards = document.querySelectorAll('.hero-cards > div');
+					cards.forEach(card => {
+						card.addEventListener('mouseenter', () => {
+							gsap.to(card, {
+								y: -5,
+								scale: 1.02,
+								duration: 0.3,
+								ease: 'power2.out',
+							});
+						});
+						
+						card.addEventListener('mouseleave', () => {
+							gsap.to(card, {
+								y: 0,
+								scale: 1,
+								duration: 0.3,
+								ease: 'power2.out',
+							});
+						});
+					});
+
+					// Efecto hover en la foto
+					const photo = document.querySelector('.hero-photo');
+					if (photo) {
+						photo.addEventListener('mouseenter', () => {
+							gsap.to(photo, {
+								scale: 1.05,
+								duration: 0.4,
+								ease: 'power2.out',
+							});
+						});
+						
+						photo.addEventListener('mouseleave', () => {
+							gsap.to(photo, {
+								scale: 1,
+								duration: 0.4,
+								ease: 'power2.out',
+							});
+						});
+					}
+				});
+			</script>
+
 		</SectionContainer>
 		
-		<SectionContainer id="experience" class="mb-20 max-w-[800px]">
-			
-			<h2 class="text-2xl font-semibold mb-6 flex gap-x-2 items-center justify-center">
-				<SuitCase class="size-6"/>
-				Experiencia
+		<SectionContainer id="architecture" class="mb-32 max-w-[1200px]">
+			<h2 class="text-3xl font-bold mb-8 flex gap-x-3 items-center justify-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
+				<ArchitectureIcon class="size-8 text-cyan-400"/>
+				Arquitectura Técnica
 			</h2>
-			<Experience/>
+			<Architecture/>
 		</SectionContainer>
-		<SectionContainer id="projects" class="mb-40 max-w-[800px]">
+		
+		<!-- Timeline Profesional (reemplaza Experiencia) -->
+		<SectionContainer id="timeline" class="mb-20 max-w-[900px]">
+			<h2 class="text-3xl font-semibold mb-8 flex gap-x-3 items-center justify-center">
+				<TimelineIcon class="size-8"/>
+				Trayectoria Profesional
+			</h2>
+			<Timeline/>
+		</SectionContainer>
+
+		<SectionContainer id="projects" class="mb-20 max-w-[800px]">
 			
 			<h2 class="text-2xl font-semibold mb-6 flex gap-x-2 items-center justify-center">
 				<Code class="size-6"/>
 				Proyectos
 			</h2>
 			<Projects/>
+		</SectionContainer>
+
+		<!-- Métricas de Impacto -->
+		<SectionContainer class="mb-20 max-w-[1000px]">
+			<ImpactMetrics/>
+		</SectionContainer>
+
+		<!-- Stack Técnico con Criterio -->
+		<SectionContainer id="stack" class="mb-20 max-w-[900px]">
+			<h2 class="text-3xl font-semibold mb-8 flex gap-x-3 items-center justify-center">
+				<StackIcon class="size-8"/>
+				Stack Técnico & Decisiones de Ingeniería
+			</h2>
+			<TechStack/>
+		</SectionContainer>
+
+		<!-- Propuesta de Valor -->
+		<SectionContainer id="value" class="mb-20 max-w-[1000px]">
+			<h2 class="text-3xl font-semibold mb-8 flex gap-x-3 items-center justify-center">
+				<ValueIcon class="size-8"/>
+				Mi Propuesta de Valor
+			</h2>
+			<ValueProposition/>
+		</SectionContainer>
+
+		<!-- Firma Profesional -->
+		<SectionContainer class="mb-40 max-w-[800px]">
+			<div class="rounded-xl border border-cyan-500/30 bg-gradient-to-r from-cyan-500/10 via-yellow-400/10 to-red-500/10 p-8 text-center backdrop-blur-sm">
+				<p class="text-lg text-white/90 italic leading-relaxed mb-4">
+					"Busco construir software con propósito: soluciones escalables que cuiden tanto el rendimiento como los recursos."
+				</p>
+				<p class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-yellow-400 to-red-400">
+					— Marco Molina, Ingeniero Civil Informático
+				</p>
+			</div>
 		</SectionContainer>
 
 	</main>

@@ -1,0 +1,344 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SectionContainer from '../../components/SectionContainer.astro';
+import Nextjs from '../../components/icons/Nextjs.astro';
+import Typescript from '../../components/icons/Typescript.astro';
+import Prisma from '../../components/icons/Prisma.astro';
+import Azure from '../../components/icons/Azure.astro';
+
+const TECH_STACK = [
+    { name: "Next.js", icon: Nextjs, color: "from-cyan-500 to-blue-500" },
+    { name: "NestJS", icon: Typescript, color: "from-red-500 to-pink-500" },
+    { name: "PostgreSQL/Neon", icon: Prisma, color: "from-purple-500 to-indigo-500" },
+    { name: "Cloud Run", icon: Azure, color: "from-blue-500 to-cyan-500" },
+    { name: "Cloudflare R2", icon: Azure, color: "from-orange-500 to-yellow-500" },
+    { name: "MS Entra ID", icon: Azure, color: "from-green-500 to-emerald-500" }
+]
+
+const FEATURES = [
+    {
+        title: "Sistema de Cotizaciones",
+        description: "Gestión completa del ciclo de cotizaciones marítimas, desde la solicitud hasta la aprobación",
+        icon: "📋"
+    },
+    {
+        title: "Registro Operativo",
+        description: "Captura y trazabilidad de información operativa de embarques y logística marítima",
+        icon: "🚢"
+    },
+    {
+        title: "Cierres Mensuales",
+        description: "Automatización de procesos contables y reportes mensuales de operaciones",
+        icon: "📊"
+    },
+    {
+        title: "Integración Softland",
+        description: "Sincronización bidireccional con sistema contable empresarial Softland",
+        icon: "🔄"
+    }
+]
+
+const CHALLENGES = [
+    {
+        challenge: "Procesos manuales lentos y propensos a errores",
+        solution: "Automatización con validaciones en tiempo real y flujos de aprobación digitales"
+    },
+    {
+        challenge: "Falta de trazabilidad en operaciones marítimas",
+        solution: "Base de datos relacional con historial completo y auditoría de cambios"
+    },
+    {
+        challenge: "Desconexión entre cotizaciones y contabilidad",
+        solution: "API de integración con Softland para sincronización automática de datos"
+    },
+    {
+        challenge: "Costos elevados de infraestructura cloud",
+        solution: "Arquitectura serverless con Cloud Run (sin instancias mínimas) + branching de Neon"
+    }
+]
+
+const TECHNICAL_DECISIONS = [
+    {
+        title: "¿Por qué Neon Branching?",
+        description: "Permite crear entornos de QA/Testing aislados sin costo adicional, usando la función de branches de base de datos. Cada branch es una copia ligera que comparte storage."
+    },
+    {
+        title: "¿Por qué Cloud Run sobre Vercel?",
+        description: "Mayor control sobre costos (pago por uso real, sin instancias mínimas). Para entornos QA/Prod con tráfico irregular, el ahorro es significativo (~70% vs otras plataformas)."
+    },
+    {
+        title: "¿Por qué Cloudflare R2?",
+        description: "Almacenamiento de documentos operativos (contratos, órdenes de compra) sin costos de egress. Integración simple vía SDK y URLs presigned para seguridad."
+    },
+    {
+        title: "¿Por qué MS Entra ID?",
+        description: "Requisito del cliente para SSO empresarial. Integración con ecosistema Microsoft 365 que ya usaban. Gestión centralizada de usuarios y roles."
+    }
+]
+---
+
+<Layout 
+    title="Case Study: Koralis - Sistema Marítimo-Logístico | Marco Molina"
+    description="Arquitectura y desarrollo completo de plataforma para gestión de cotizaciones, operaciones marítimas y cierres contables. Stack: NestJS, Next.js, Neon, Cloud Run, Cloudflare R2."
+>
+    <main class="px-4">
+        <!-- Hero Section -->
+        <SectionContainer class="py-16 max-w-[1000px]">
+            <a href="/" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+                Volver al portafolio
+            </a>
+
+            <div class="mb-8">
+                <span class="text-sm bg-yellow-400/20 text-yellow-400 px-3 py-1 rounded-full font-medium">
+                    Case Study
+                </span>
+            </div>
+
+            <h1 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-yellow-400 to-red-400 mb-6">
+                Koralis & Remoras
+            </h1>
+            
+            <p class="text-2xl text-white/80 mb-4">
+                Sistema integral de gestión marítimo-logística
+            </p>
+
+            <p class="text-lg text-white/60 leading-relaxed">
+                Plataforma web para optimización de procesos de cotización, registro operativo, 
+                cierres contables e integración con sistemas empresariales del sector marítimo.
+            </p>
+
+            <div class="flex flex-wrap gap-3 mt-8">
+                {TECH_STACK.map(tech => (
+                    <span class="flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-2 backdrop-blur-sm hover:scale-105 transition-transform">
+                        <tech.icon class="size-5" />
+                        <span class="text-sm font-medium">{tech.name}</span>
+                    </span>
+                ))}
+            </div>
+        </SectionContainer>
+
+        <!-- Contexto del Proyecto -->
+        <SectionContainer class="py-16 max-w-[1000px]">
+            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+                <span class="text-4xl">🎯</span>
+                Contexto del Proyecto
+            </h2>
+
+            <div class="rounded-xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm">
+                <p class="text-lg text-white/80 leading-relaxed mb-6">
+                    <strong class="text-yellow-400">Koralis</strong> es un sistema de gestión empresarial desarrollado 
+                    para el sector marítimo-logístico, enfocado en digitalizar y optimizar procesos que tradicionalmente 
+                    se realizaban de forma manual o con herramientas fragmentadas (Excel, emails, documentos físicos).
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="rounded-lg border border-cyan-500/30 bg-cyan-500/5 p-6">
+                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Usuario Principal</h3>
+                        <p class="text-white/70 text-sm leading-relaxed">
+                            Empresas de logística marítima que gestionan cotizaciones de servicios, 
+                            operaciones de embarque, documentación de carga y contabilidad de proyectos.
+                        </p>
+                    </div>
+
+                    <div class="rounded-lg border border-yellow-500/30 bg-yellow-500/5 p-6">
+                        <h3 class="text-xl font-bold text-yellow-400 mb-3">Estado Actual</h3>
+                        <p class="text-white/70 text-sm leading-relaxed">
+                            <span class="bg-orange-500/20 text-orange-400 px-2 py-1 rounded text-xs font-medium">
+                                En Construcción
+                            </span><br/>
+                            Sistema en desarrollo activo, con módulos core implementados y en fase de testing interno.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </SectionContainer>
+
+        <!-- Funcionalidades Principales -->
+        <SectionContainer class="py-16 max-w-[1000px]">
+            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+                <span class="text-4xl">⚙️</span>
+                Funcionalidades Principales
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                {FEATURES.map(feature => (
+                    <div class="group rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm hover:border-white/30 hover:bg-white/10 transition-all">
+                        <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">
+                            {feature.icon}
+                        </div>
+                        <h3 class="text-xl font-bold text-yellow-400 mb-3">
+                            {feature.title}
+                        </h3>
+                        <p class="text-white/70 text-sm leading-relaxed">
+                            {feature.description}
+                        </p>
+                    </div>
+                ))}
+            </div>
+        </SectionContainer>
+
+        <!-- Problemas y Soluciones -->
+        <SectionContainer class="py-16 max-w-[1000px]">
+            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+                <span class="text-4xl">🔧</span>
+                Desafíos Técnicos & Soluciones
+            </h2>
+
+            <div class="space-y-6">
+                {CHALLENGES.map((item, index) => (
+                    <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all">
+                        <div class="flex items-start gap-4">
+                            <div class="text-2xl font-bold text-cyan-400 mt-1">
+                                {index + 1}
+                            </div>
+                            <div class="flex-1">
+                                <div class="mb-4">
+                                    <span class="text-xs text-red-400 font-medium uppercase tracking-wide">
+                                        ❌ Desafío
+                                    </span>
+                                    <p class="text-white/80 mt-2">
+                                        {item.challenge}
+                                    </p>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-green-400 font-medium uppercase tracking-wide">
+                                        ✅ Solución
+                                    </span>
+                                    <p class="text-white/70 mt-2 text-sm">
+                                        {item.solution}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </SectionContainer>
+
+        <!-- Decisiones Técnicas -->
+        <SectionContainer class="py-16 max-w-[1000px]">
+            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+                <span class="text-4xl">💡</span>
+                Decisiones de Ingeniería
+            </h2>
+
+            <div class="space-y-6">
+                {TECHNICAL_DECISIONS.map(decision => (
+                    <div class="rounded-xl border border-yellow-500/30 bg-gradient-to-br from-yellow-500/5 to-orange-500/5 p-6 backdrop-blur-sm">
+                        <h3 class="text-xl font-bold text-yellow-400 mb-3">
+                            {decision.title}
+                        </h3>
+                        <p class="text-white/70 leading-relaxed">
+                            {decision.description}
+                        </p>
+                    </div>
+                ))}
+            </div>
+        </SectionContainer>
+
+        <!-- Arquitectura del Sistema -->
+        <SectionContainer class="py-16 max-w-[1000px]">
+            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+                <span class="text-4xl">🏗️</span>
+                Arquitectura del Sistema
+            </h2>
+
+            <div class="rounded-xl border border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 p-8 backdrop-blur-sm">
+                <pre class="text-sm text-white/80 font-mono leading-relaxed overflow-x-auto">
+{`┌─────────────────────────────────────────────────┐
+│          FRONTEND (Next.js + React)             │
+│   · TanStack Query (data fetching)              │
+│   · Zustand (state management)                  │
+│   · TailwindCSS (UI)                            │
+└──────────────────┬──────────────────────────────┘
+                   │ HTTPS
+┌──────────────────▼──────────────────────────────┐
+│         API Gateway / Load Balancer             │
+└──────────────────┬──────────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────────┐
+│        BACKEND (NestJS en Cloud Run)            │
+│   · Modules: Auth, Quotes, Operations, Reports  │
+│   · Prisma ORM                                  │
+│   · MS Entra ID (SSO)                           │
+└───────┬──────────────────────┬──────────────────┘
+        │                      │
+        ▼                      ▼
+┌──────────────────┐   ┌──────────────────────┐
+│  PostgreSQL      │   │  Cloudflare R2       │
+│  (Neon)          │   │  (File Storage)      │
+│                  │   │                      │
+│  · Branching:    │   │  · Contratos         │
+│    - Prod        │   │  · Órdenes Compra    │
+│    - QA          │   │  · Docs Operativos   │
+│    - Test        │   └──────────────────────┘
+│    - Demo        │
+└──────────────────┘
+        │
+        ▼
+┌──────────────────────────────────────────────────┐
+│          Integración Softland (ERP)              │
+│          API REST bidireccional                  │
+└──────────────────────────────────────────────────┘`}
+                </pre>
+            </div>
+        </SectionContainer>
+
+        <!-- Lecciones Aprendidas -->
+        <SectionContainer class="py-16 max-w-[1000px] mb-40">
+            <h2 class="text-3xl font-bold mb-8 flex items-center gap-3">
+                <span class="text-4xl">📚</span>
+                Lecciones Técnicas
+            </h2>
+
+            <div class="space-y-4">
+                <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+                    <h3 class="text-lg font-bold text-cyan-400 mb-2">
+                        Neon Branching cambió la forma de gestionar entornos
+                    </h3>
+                    <p class="text-white/70 text-sm leading-relaxed">
+                        Poder crear una branch de base de datos en segundos para QA/testing sin costo adicional 
+                        eliminó la necesidad de mantener múltiples bases de datos. Cada desarrollador puede tener 
+                        su propia branch para probar migraciones sin afectar a otros.
+                    </p>
+                </div>
+
+                <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+                    <h3 class="text-lg font-bold text-cyan-400 mb-2">
+                        Cloud Run es ideal para tráfico irregular
+                    </h3>
+                    <p class="text-white/70 text-sm leading-relaxed">
+                        Para un sistema B2B con 20-30 usuarios activos en horario laboral, pagar solo por requests 
+                        reales (sin instancias mínimas) redujo costos dramáticamente vs. mantener servidores 24/7. 
+                        El auto-scaling es automático y la latencia de cold start (~1s) es aceptable para este caso de uso.
+                    </p>
+                </div>
+
+                <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+                    <h3 class="text-lg font-bold text-cyan-400 mb-2">
+                        La integración con sistemas legacy es el 70% del trabajo
+                    </h3>
+                    <p class="text-white/70 text-sm leading-relaxed">
+                        Conectar con Softland (sistema contable tradicional) requirió más tiempo que desarrollar 
+                        el sistema completo. Documentación inexistente, APIs inestables y formatos de datos legacy. 
+                        Aprendí la importancia de considerar integraciones desde la arquitectura inicial.
+                    </p>
+                </div>
+
+                <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+                    <h3 class="text-lg font-bold text-cyan-400 mb-2">
+                        MS Entra ID es complejo pero vale la pena para empresas
+                    </h3>
+                    <p class="text-white/70 text-sm leading-relaxed">
+                        La curva de aprendizaje de Microsoft Identity Platform es empinada, pero para clientes 
+                        corporativos que ya usan Microsoft 365, el SSO es un must-have. Usuarios y roles 
+                        centralizados significan menos gestión manual.
+                    </p>
+                </div>
+            </div>
+        </SectionContainer>
+    </main>
+</Layout>

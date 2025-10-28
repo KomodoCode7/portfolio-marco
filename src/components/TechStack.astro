@@ -1,0 +1,66 @@
+---
+import Nextjs from "./icons/Nextjs.astro"
+import Tailwind from "./icons/Tailwind.astro"
+import Typescript from "./icons/Typescript.astro"
+import Prisma from "./icons/Prisma.astro"
+
+const STACK_SECTIONS = [
+    {
+        category: "Frontend",
+        description: "React, Next.js, TanStack Query, Zustand",
+        detail: "Renderizado híbrido (SSR/SSG), caching inteligente y gestión de estado optimizada",
+        icon: Nextjs,
+        color: "from-cyan-500 to-blue-500"
+    },
+    {
+        category: "Backend",
+        description: "NestJS, Prisma, PostgreSQL/Neon",
+        detail: "Arquitectura modular, entornos ramificados (QA/Prod), migraciones automatizadas",
+        icon: Typescript,
+        color: "from-blue-500 to-indigo-500"
+    },
+    {
+        category: "Infraestructura",
+        description: "Cloud Run, Cloudflare R2, Docker",
+        detail: "Despliegue aislado por servicio, almacenamiento distribuido, contenedores optimizados",
+        icon: Prisma,
+        color: "from-purple-500 to-pink-500"
+    },
+    {
+        category: "Cloud & Ops",
+        description: "CI/CD, DNS automatizado, Monitoreo",
+        detail: "Pipelines automatizados, logs estructurados, métricas en tiempo real",
+        icon: Tailwind,
+        color: "from-green-500 to-teal-500"
+    }
+]
+---
+
+<div class="space-y-6">
+    {STACK_SECTIONS.map(section => (
+        <div class="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10">
+            <div class="flex items-start gap-4">
+                <div class={`rounded-lg bg-gradient-to-br ${section.color} p-3 opacity-80 transition-transform group-hover:scale-110`}>
+                    <section.icon class="size-6 text-white" />
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-xl font-bold text-yellow-400/90 mb-2">
+                        {section.category}
+                    </h3>
+                    <p class="text-base font-semibold text-white/90 mb-2">
+                        {section.description}
+                    </p>
+                    <p class="text-sm text-white/60 leading-relaxed">
+                        {section.detail}
+                    </p>
+                </div>
+            </div>
+        </div>
+    ))}
+</div>
+
+<div class="mt-8 rounded-xl border border-cyan-500/30 bg-cyan-500/5 p-6 backdrop-blur-sm">
+    <p class="text-center text-sm text-cyan-200/80 italic">
+        "Cada línea de este stack la he implementado en producción, no copiado de un tutorial."
+    </p>
+</div>

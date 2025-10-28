@@ -1,0 +1,46 @@
+---
+const METRICS = [
+    {
+        value: "2023",
+        label: "Trabajando en sistemas desde 3er año",
+        icon: "�",
+        color: "from-cyan-500 to-blue-500"
+    },
+    {
+        value: "3",
+        label: "Roles en la industria (Datos → QA → Dev)",
+        icon: "⚡",
+        color: "from-yellow-500 to-orange-500"
+    },
+    {
+        value: "4+",
+        label: "Proyectos/Sistemas completados",
+        icon: "�",
+        color: "from-green-500 to-emerald-500"
+    },
+    {
+        value: "2025",
+        label: "Titulado Ing. Civil Informático",
+        icon: "🎓",
+        color: "from-purple-500 to-pink-500"
+    }
+]
+---
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+    {METRICS.map(metric => (
+        <div class="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur-sm transition-all hover:border-white/30 hover:bg-white/10 hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity" 
+                 class={metric.color}></div>
+            <div class="text-4xl mb-2 group-hover:scale-110 transition-transform">
+                {metric.icon}
+            </div>
+            <div class={`text-3xl font-bold mb-2 bg-gradient-to-br ${metric.color} bg-clip-text text-transparent`}>
+                {metric.value}
+            </div>
+            <div class="text-xs text-white/70 leading-tight">
+                {metric.label}
+            </div>
+        </div>
+    ))}
+</div>
