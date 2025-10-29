@@ -12,7 +12,7 @@ export default defineConfig({
       }
     },
     ssr: {
-      noExternal: ['@fontsource-variable/montserrat'] // Especifica el paquete que necesita ser excluido del procesamiento en SSR
+      noExternal: ['@fontsource-variable/montserrat', 'gsap'] // Especifica el paquete que necesita ser excluido del procesamiento en SSR
     }
   }
 });

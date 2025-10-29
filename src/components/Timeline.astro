@@ -37,7 +37,7 @@ const TIMELINE_EVENTS = [
     },
     {
         year: "Ener - Jul 2023",
-        title: "Analista de Datos - Sotex S.P.A.",
+        title: "Analista de Datos - ASECONEST LIMITADA",
         description: "Inicio en la industria del software. Análisis de datos, soporte técnico a usuarios, generación de reportes y visualizaciones. Primera experiencia profesional mientras cursaba 3er año de Ingeniería Civil Informática.",
         highlight: false,
         current: false
@@ -138,20 +138,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Animar cada item del timeline
     const timelineItems = document.querySelectorAll('.timeline-item');
     
-    timelineItems.forEach((item, index) => {
+    timelineItems.forEach((item) => {
         const dot = item.querySelector('.timeline-dot');
         const card = item.querySelector('.timeline-card');
         
-        // Setear estado inicial invisible ANTES de crear la timeline
-        gsap.set(dot, { scale: 0, opacity: 0 });
-        gsap.set(card, { x: -30, opacity: 0 });
-        
-        // Crear timeline de GSAP para cada item
+        // Crear timeline de GSAP para cada item con ScrollTrigger
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: item,
-                start: 'top 85%',
+                start: 'top 80%',
+                end: 'top 20%',
                 toggleActions: 'play none none reverse',
+                // markers: true, // Descomenta para debug
             }
         });
 
@@ -167,20 +165,21 @@ document.addEventListener('DOMContentLoaded', () => {
         tl.to(card, {
             x: 0,
             opacity: 1,
-            duration: 0.6,
+            duration: 0.2,
             ease: 'power3.out',
-        }, '-=0.3'); // Overlap con la animación anterior
+        }, '-=0.2'); // Overlap con la animación anterior
 
         // Hover effect en las cards
         item.addEventListener('mouseenter', () => {
             gsap.to(card, {
                 y: -5,
-                duration: 0.2,
+                duration: 0.3,
                 ease: 'power2.out',
             });
             gsap.to(dot, {
+                y: -5,
                 scale: 1.2,
-                duration: 0.2,
+                duration: 0.3,
                 ease: 'elastic.out(1, 0.3)',
             });
         });
@@ -188,12 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
         item.addEventListener('mouseleave', () => {
             gsap.to(card, {
                 y: 0,
-                duration: 0.2,
+                duration: 0.3,
                 ease: 'power2.out',
             });
             gsap.to(dot, {
+                y: 0,
                 scale: 1,
-                duration: 0.2,
+                duration: 0.3,
                 ease: 'elastic.out(1, 0.3)',
             });
         });
@@ -222,12 +222,16 @@ document.addEventListener('DOMContentLoaded', () => {
         pointer-events: none;
     }
 
+    /* Estado inicial oculto con CSS para evitar FOUC */
     .timeline-dot {
-        transition: all 0.3s ease;
+        opacity: 0;
+        transform: scale(0);
     }
 
     .timeline-card {
         transform-origin: left center;
+        opacity: 0;
+        transform: translateX(-30px);
     }
 
     /* Mejora visual para el badge actual */

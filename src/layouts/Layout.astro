@@ -1,7 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import '@fontsource-variable/montserrat';
+import '@fontsource-variable/montserrat/wght.css';
 interface Props {
 	title: string;
 	description: string;
@@ -21,6 +21,9 @@ const { title, description } = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body>
+		<!-- Cursor personalizado -->
+		<div id="custom-cursor" class="custom-cursor"></div>
+		
 		<!-- Contenedor para el fondo Vanta.js -->
 		<div id="vanta-bg" class="fixed top-0 left-0 w-full h-full -z-10 text-cyan-400"></div>
 		
@@ -90,6 +93,11 @@ const { title, description } = Astro.props;
 	html {
 		font-family: 'Montserrat Variable', sans-serif;
 		scroll-behavior: smooth;
+		cursor: none; /* Ocultar cursor por defecto */
+	}
+
+	* {
+		cursor: none !important; /* Asegurar que todos los elementos oculten el cursor */
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -97,4 +105,56 @@ const { title, description } = Astro.props;
 			scroll-behavior: auto;
 		}
 	}
+
+	/* Cursor personalizado */
+	.custom-cursor {
+		position: fixed;
+		width: 20px;
+		height: 20px;
+		background: linear-gradient(135deg, #87CEEB, #4FC3F7);
+		border-radius: 50%;
+		pointer-events: none;
+		z-index: 99999;
+		transform: translate(-50%, -50%);
+		transition: width 0.15s ease, height 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+		opacity: 0.9;
+		box-shadow: 0 0 20px rgba(135, 206, 235, 0.8), 0 0 40px rgba(79, 195, 247, 0.4);
+		mix-blend-mode: screen;
+	}
+
+	/* Cursor más grande en hover sobre elementos interactivos */
+	.custom-cursor.hover {
+		width: 35px;
+		height: 35px;
+		opacity: 1;
+		background: linear-gradient(135deg, #4FC3F7, #87CEEB);
+	}
 </style>
+
+<script>
+	// Script para mover el cursor personalizado
+	document.addEventListener('DOMContentLoaded', () => {
+		const cursor = document.getElementById('custom-cursor');
+		
+		if (cursor) {
+			// Seguir el movimiento del mouse
+			document.addEventListener('mousemove', (e) => {
+				cursor.style.left = `${e.clientX}px`;
+				cursor.style.top = `${e.clientY}px`;
+			});
+
+			// Agregar clase hover en elementos interactivos
+			const interactiveElements = document.querySelectorAll('a, button, [role="button"], .tech-card, input, textarea');
+			
+			interactiveElements.forEach(el => {
+				el.addEventListener('mouseenter', () => {
+					cursor.classList.add('hover');
+				});
+				
+				el.addEventListener('mouseleave', () => {
+					cursor.classList.remove('hover');
+				});
+			});
+		}
+	});
+</script>

@@ -1,66 +1,424 @@
 ---
+import React from "./icons/React.astro"
 import Nextjs from "./icons/Nextjs.astro"
-import Tailwind from "./icons/Tailwind.astro"
 import Typescript from "./icons/Typescript.astro"
+import Tailwind from "./icons/Tailwind.astro"
+import Nestjs from "./icons/Nestjs.astro"
+import Nodejs from "./icons/Nodejs.astro"
 import Prisma from "./icons/Prisma.astro"
+import Postgresql from "./icons/Postgresql.astro"
+import Docker from "./icons/Docker.astro"
+import Vercel from "./icons/Vercel.astro"
+import Cloudflare from "./icons/Cloudflare.astro"
+import GoogleCloud from "./icons/GoogleCloud.astro"
 
-const STACK_SECTIONS = [
+const TECH_STACK = [
     {
         category: "Frontend",
-        description: "React, Next.js, TanStack Query, Zustand",
-        detail: "Renderizado híbrido (SSR/SSG), caching inteligente y gestión de estado optimizada",
-        icon: Nextjs,
-        color: "from-purple-500 to-purple-500"
+        technologies: [
+            {
+                name: "Next.js",
+                icon: Nextjs,
+                color: "#000000",
+                features: [
+                    "App Router con Server Components",
+                    "SSR/SSG híbrido para SEO",
+                    "Optimización automática de imágenes",
+                    "Edge Runtime para latencia mínima"
+                ]
+            },
+            {
+                name: "React",
+                icon: React,
+                color: "#61DAFB",
+                features: [
+                    "Hooks personalizados reutilizables",
+                    "Context API para estado global",
+                    "Suspense para lazy loading",
+                    "React Server Components"
+                ]
+            },
+            {
+                name: "TypeScript",
+                icon: Typescript,
+                color: "#3178C6",
+                features: [
+                    "Type safety en toda la app",
+                    "Interfaces y tipos personalizados",
+                    "Autocomplete mejorado",
+                    "Detección de errores en desarrollo"
+                ]
+            },
+            {
+                name: "Tailwind CSS",
+                icon: Tailwind,
+                color: "#06B6D4",
+                features: [
+                    "Utility-first para desarrollo rápido",
+                    "Diseño responsive mobile-first",
+                    "Dark mode integrado",
+                    "Purge CSS para bundles pequeños"
+                ]
+            }
+        ]
     },
     {
         category: "Backend",
-        description: "NestJS, Prisma, PostgreSQL/Neon",
-        detail: "Arquitectura modular, entornos ramificados (QA/Prod), migraciones automatizadas",
-        icon: Typescript,
-        color: "from-purple-500 to-indigo-500"
+        technologies: [
+            {
+                name: "NestJS",
+                icon: Nestjs,
+                color: "#E0234E",
+                features: [
+                    "Arquitectura modular escalable",
+                    "Dependency Injection nativo",
+                    "Guards y Pipes para validación",
+                    "WebSockets y GraphQL support"
+                ]
+            },
+            {
+                name: "Prisma ORM",
+                icon: Prisma,
+                color: "#2D3748",
+                features: [
+                    "Type-safe database client",
+                    "Migraciones automatizadas",
+                    "Schema-first development",
+                    "Query optimization automática"
+                ]
+            },
+            {
+                name: "PostgreSQL",
+                icon: Postgresql,
+                color: "#336791",
+                features: [
+                    "Relaciones complejas optimizadas",
+                    "Índices para queries rápidos",
+                    "Transacciones ACID",
+                    "Serverless con Neon/Supabase"
+                ]
+            },
+            {
+                name: "Node.js",
+                icon: Nodejs,
+                color: "#339933",
+                features: [
+                    "Event-driven non-blocking I/O",
+                    "NPM ecosystem robusto",
+                    "Performance con V8 engine",
+                    "Microservices architecture"
+                ]
+            }
+        ]
     },
     {
-        category: "Infraestructura",
-        description: "Cloud Run, Cloudflare R2, Docker",
-        detail: "Despliegue aislado por servicio, almacenamiento distribuido, contenedores optimizados",
-        icon: Prisma,
-        color: "from-purple-500 to-pink-500"
-    },
-    {
-        category: "Cloud & Ops",
-        description: "CI/CD, DNS automatizado, Monitoreo",
-        detail: "Pipelines automatizados, logs estructurados, métricas en tiempo real",
-        icon: Tailwind,
-        color: "from-green-500 to-teal-500"
+        category: "DevOps & Cloud",
+        technologies: [
+            {
+                name: "Docker",
+                icon: Docker,
+                color: "#2496ED",
+                features: [
+                    "Contenedores optimizados multi-stage",
+                    "Desarrollo consistente local/prod",
+                    "Orquestación con Compose",
+                    "Imágenes livianas con Alpine"
+                ]
+            },
+            {
+                name: "Google Cloud",
+                icon: GoogleCloud,
+                color: "#4285F4",
+                features: [
+                    "Cloud Run para auto-scaling",
+                    "Cloud Storage para assets",
+                    "IAM para seguridad granular",
+                    "Cloud Build para CI/CD"
+                ]
+            },
+            {
+                name: "Vercel",
+                icon: Vercel,
+                color: "#000000",
+                features: [
+                    "Deploy automático desde Git",
+                    "Edge Network global",
+                    "Preview deployments por PR",
+                    "Analytics y Web Vitals"
+                ]
+            },
+            {
+                name: "Cloudflare",
+                icon: Cloudflare,
+                color: "#F38020",
+                features: [
+                    "R2 Storage (S3-compatible)",
+                    "Workers para Edge Computing",
+                    "CDN global automático",
+                    "DDoS protection incluido"
+                ]
+            }
+        ]
     }
 ]
 ---
 
-<div class="space-y-6">
-    {STACK_SECTIONS.map(section => (
-        <div class="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10">
-            <div class="flex items-start gap-4">
-                <div class={`rounded-lg bg-gradient-to-br ${section.color} p-3 opacity-80 transition-transform group-hover:scale-110`}>
-                    <section.icon class="size-6 text-white" />
-                </div>
-                <div class="flex-1">
-                    <h3 class="text-xl font-bold text-yellow-400/90 mb-2">
-                        {section.category}
-                    </h3>
-                    <p class="text-base font-semibold text-white/90 mb-2">
-                        {section.description}
-                    </p>
-                    <p class="text-sm text-white/60 leading-relaxed">
-                        {section.detail}
-                    </p>
-                </div>
+<div class="tech-stack-container space-y-12">
+    {TECH_STACK.map((section, sectionIndex) => (
+        <div class="tech-section" data-section={sectionIndex}>
+            <h3 class="text-2xl font-bold text-purple-400 mb-6 text-center">
+                {section.category}
+            </h3>
+            
+            <div class="tech-icons-row flex justify-center items-start gap-16 flex-wrap">
+                {section.technologies.map((tech, techIndex) => (
+                    <div 
+                        class="tech-card"
+                        data-section={sectionIndex}
+                        data-tech={techIndex}
+                    >
+                        <div 
+                            class="tech-card-inner relative rounded-xl bg-white/20 border border-white/10 backdrop-blur-xl overflow-hidden"
+                            style={`--tech-color: ${tech.color}`}
+                        >
+                            <!-- Contenido compactado (vista inicial) -->
+                            <div class="tech-compact-view p-4 flex flex-col items-center">
+                                <tech.icon class="tech-icon w-12 h-12 transition-all duration-300" style={`color: ${tech.color}`} />
+                                <span class="tech-name block text-center text-xs mt-2 text-white/70 font-medium">
+                                    {tech.name}
+                                </span>
+                            </div>
+
+                            <!-- Contenido expandido (se muestra al hover) -->
+                            <div class="tech-expanded-view absolute inset-0 bg-black/90 py-3 px-1 opacity-0 pointer-events-none flex items-center gap-1">
+                                <div class="tech-icon-expanded w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={`background-color: ${tech.color}20`}>
+                                    <tech.icon class="w-6 h-6" style={`color: ${tech.color}`} />
+                                </div>
+                                <ul class="space-y-1 flex-1">
+                                    {tech.features.slice(0, 2).map(feature => (
+                                        <li class="flex items-start gap-1 text-xs leading-tight text-white/80">
+                                            <span class="text-purple-400 mt-0.5 text-xs">▸</span>
+                                            <span class="">{feature}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     ))}
 </div>
 
-<div class="mt-8 rounded-xl border border-purple-500/30 bg-purple-500/5 p-6 backdrop-blur-sm">
-    <p class="text-center text-sm text-purple-200/80 italic">
-        "Cada línea de este stack la he implementado en producción, no copiado de un tutorial."
-    </p>
-</div>
+
+<script>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const techSections = document.querySelectorAll('.tech-section');
+
+    techSections.forEach((section) => {
+        const cards = section.querySelectorAll('.tech-card');
+
+        // Animación de entrada con scroll
+        gsap.fromTo(cards,
+            {
+                opacity: 0,
+                y: 30,
+                scale: 0.9
+            },
+            {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.5,
+                stagger: 0.1,
+                ease: 'back.out(1.5)',
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse',
+                }
+            }
+        );
+
+        // Hover effects en cada card
+        cards.forEach((card, cardIndex) => {
+            const cardInner = card.querySelector('.tech-card-inner');
+            const compactView = card.querySelector('.tech-compact-view');
+            const expandedView = card.querySelector('.tech-expanded-view');
+            const icon = card.querySelector('.tech-icon');
+            
+            let isExpanded = false;
+
+            card.addEventListener('mouseenter', () => {
+                if (isExpanded) return;
+                isExpanded = true;
+
+                // Cancelar todas las animaciones previas
+                gsap.killTweensOf([cardInner, icon, compactView, expandedView]);
+                
+                // Expandir la card (solo horizontalmente)
+                gsap.to(cardInner, {
+                    width: '280px',
+                    borderColor: 'rgba(168, 85, 247, 0.5)',
+                    boxShadow: '0 20px 60px rgba(168, 85, 247, 0.3)',
+                    duration: 0.4,
+                    ease: 'power3.out',
+                    zIndex: 50
+                });
+
+                // Rotar ligeramente el icono en la vista compacta
+                gsap.to(icon, {
+                    rotation: 20,
+                    scale: 1.5,
+                    duration: 0.15,
+                    ease: 'back.out(1.5)'
+                });
+
+                // Fade out vista compacta PRIMERO
+                gsap.to(compactView, {
+                    opacity: 0,
+                    duration: 0.15,
+                    ease: 'power2.in'
+                });
+
+                // Fade in vista expandida DESPUÉS
+                gsap.to(expandedView, {
+                    opacity: 1,
+                    pointerEvents: 'auto',
+                    duration: 0.25,
+                    delay: 0.15,
+                    ease: 'power2.out'
+                });
+
+                // Animar las features una por una
+                if (expandedView) {
+                    const features = expandedView.querySelectorAll('li');
+                    gsap.killTweensOf(features);
+                    gsap.fromTo(features,
+                        { opacity: 0, x: -10 },
+                        {
+                            opacity: 1,
+                            x: 0,
+                            duration: 0.3,
+                            stagger: 0.05,
+                            delay: 0.2,
+                            ease: 'power2.out'
+                        }
+                    );
+                }
+
+                // Mover las cards adyacentes para hacer espacio
+                const expansionWidth = 160;
+                
+                cards.forEach((otherCard, otherIndex) => {
+                    if (otherCard !== card) {
+                        gsap.killTweensOf(otherCard);
+                        let xOffset = 0;
+                        
+                        if (otherIndex < cardIndex) {
+                            xOffset = -expansionWidth / 2;
+                        }
+                        else if (otherIndex > cardIndex) {
+                            xOffset = expansionWidth / 2;
+                        }
+
+                        gsap.to(otherCard, {
+                            x: xOffset,
+                            scale: 0.5,
+                            opacity: 0.4,
+                            duration: 0.4,
+                            ease: 'power3.out'
+                        });
+                    }
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                if (!isExpanded) return;
+                isExpanded = false;
+
+                // Cancelar todas las animaciones previas
+                gsap.killTweensOf([cardInner, icon, compactView, expandedView]);
+                if (expandedView) {
+                    const features = expandedView.querySelectorAll('li');
+                    gsap.killTweensOf(features);
+                }
+
+                // Fade out vista expandida PRIMERO (más rápido)
+                gsap.to(expandedView, {
+                    opacity: 0,
+                    pointerEvents: 'none',
+                    duration: 0.15,
+                    ease: 'power2.out'
+                });
+
+                // Fade in vista compacta DESPUÉS
+                gsap.to(compactView, {
+                    opacity: 1,
+                    duration: 0.2,
+                    delay: 0.1,
+                    ease: 'power2.out'
+                });
+
+                // Contraer la card
+                gsap.to(cardInner, {
+                    width: 'auto',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    boxShadow: '0 0 0 rgba(168, 85, 247, 0)',
+                    duration: 0.3,
+                    ease: 'power2.in',
+                    zIndex: 1
+                });
+
+                // Resetear rotación del icono
+                gsap.to(icon, {
+                    rotation: 0,
+                    scale: 1,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+
+                // Restaurar todas las cards a su posición original
+                cards.forEach((otherCard) => {
+                    gsap.killTweensOf(otherCard);
+                    gsap.to(otherCard, {
+                        x: 0,
+                        scale: 1,
+                        opacity: 1,
+                        duration: 0.3,
+                        ease: 'power2.out'
+                    });
+                });
+            });
+        });
+    });
+});
+</script>
+
+<style>
+    .tech-card-inner {
+        will-change: transform, width, height;
+        transform-origin: center center;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .tech-card {
+        width: 120px;
+        transition: all 0.3s ease;
+    }
+
+    .tech-expanded-view {
+        transition: opacity 0.3s ease;
+    }
+
+    .tech-compact-view {
+        transition: opacity 0.3s ease;
+    }
+</style>
