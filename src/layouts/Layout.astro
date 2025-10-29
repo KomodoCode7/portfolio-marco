@@ -25,9 +25,9 @@ const { title, description } = Astro.props;
 		<div id="custom-cursor" class="custom-cursor"></div>
 		
 		<!-- Contenedor para el fondo Vanta.js -->
-		<div id="vanta-bg" class="fixed top-0 left-0 w-full h-full -z-10 text-cyan-400"></div>
+		<div id="vanta-bg" class="fixed top-0 left-0 w-full h-full -z-10"></div>
 		
-		<div class="relative z-10">
+		<div class="relative z-10 backdrop-blur-[1px]">
 			<Header />
 			<slot />
 			<Footer />
