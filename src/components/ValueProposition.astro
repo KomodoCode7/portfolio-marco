@@ -1,0 +1,76 @@
+---
+const VALUE_POINTS = [
+    {
+        title: "Arquitectura modular que reduce deuda técnica",
+        description: "Diseño de sistemas escalables con separación clara de responsabilidades, facilitando el mantenimiento a largo plazo",
+        icon: "🏗️"
+    },
+    {
+        title: "Optimización real de costos cloud",
+        description: "Análisis y reducción de gastos en infraestructura mediante estrategias de auto-escalado y recursos bajo demanda",
+        icon: "💰"
+    },
+    {
+        title: "Automatización de QA sin afectar producción",
+        description: "Implementación de entornos ramificados (branching) y pipelines CI/CD que garantizan calidad sin downtime",
+        icon: "⚙️"
+    },
+    {
+        title: "Integración de autenticación empresarial",
+        description: "Experiencia con MS Entra ID, Auth.js y sistemas de roles/permisos complejos para entornos corporativos",
+        icon: "🔐"
+    },
+    {
+        title: "Comunicación técnica-negocio efectiva",
+        description: "Capacidad de traducir requerimientos técnicos en valor económico para stakeholders no técnicos",
+        icon: "💬"
+    },
+    {
+        title: "Visión integral: desde el código hasta el impacto",
+        description: "No solo implemento features, analizo cómo cada decisión técnica afecta costos, UX y objetivos de negocio",
+        icon: "🎯"
+    }
+]
+---
+
+<div class="rounded-2xl border border-purple-500/30 bg-gradient-to-br from-purple-500/5 via-yellow-400/5 to-red-500/5 p-8 backdrop-blur-sm">
+    <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-yellow-400 to-red-400 mb-6 text-center">
+        Qué aporto a una consultora financiera / tecnológica
+    </h3>
+    
+    <!-- Badge destacado -->
+    <div class="mb-8 flex justify-center">
+        <div class="inline-flex items-center gap-2 rounded-full border border-yellow-400/30 bg-yellow-400/10 px-6 py-3 backdrop-blur-sm">
+            <span class="text-2xl">📊</span>
+            <p class="text-sm font-semibold text-yellow-300">
+                Trabajando en sistemas desde 2023 (3er año) · Analista de Datos → QA → Desarrollador
+            </p>
+        </div>
+    </div>
+    
+    <div class="grid md:grid-cols-2 gap-6">
+        {VALUE_POINTS.map(point => (
+            <div class="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 transition-all hover:border-white/30 hover:bg-white/10 hover:scale-[1.02]">
+                <div class="flex items-start gap-4">
+                    <div class="text-4xl group-hover:scale-110 transition-transform">
+                        {point.icon}
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="text-lg font-bold text-yellow-400/90 mb-2 leading-tight">
+                            {point.title}
+                        </h4>
+                        <p class="text-sm text-white/70 leading-relaxed">
+                            {point.description}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        ))}
+    </div>
+    
+    <div class="mt-8 text-center">
+        <p class="text-white/60 text-sm italic">
+            Mi valor no está solo en programar, sino en diseñar soluciones que escalen técnica y económicamente
+        </p>
+    </div>
+</div>

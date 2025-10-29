@@ -13,7 +13,7 @@ const TAGS = {
     },
     TAILWIND: {
         name: "TailwindCSS",
-        color: "bg-blue-600 text-white",
+        color: "bg-white text-black",
         icon: Tailwind
     },
     JAVASCRIPT: {
@@ -23,30 +23,50 @@ const TAGS = {
     },
     TYPESCRIPT: {
         name: "TypeScript",
-        color: "bg-white text-blue-500",
+        color: "bg-black text-white",
         icon: Typescript
     },
     OPENAI: {
         name: "OpenAi API",
-        color: "bg-green-500 text-white",
+        color: "bg-white text-black",
         icon: Openai
     },
     PRISMA: {
         name: "Prisma",
-        color: "bg-white text-black",
+        color: "bg-black text-white",
         icon: Prisma
     }
 }
 const PROJECTS = [
-    {title: "Dr. Computín - Asistente Virtual para Problemas de Hardware",
-    description: `Desarrollado con Next.js, TailwindCSS y la API de OpenAI,
+    {
+        title: "Koralis & Remoras - Sistema Marítimo-Logístico",
+        description: `Plataforma integral para gestión de cotizaciones, registro operativo, cierres mensuales e integración con Softland. 
+        Sistema en construcción con arquitectura cloud escalable: NestJS, Next.js, PostgreSQL/Neon, Cloud Run, Cloudflare R2, MS Entra ID.
+        Enfocado en optimización de procesos marítimos y reducción de trabajo manual.`,
+        image: "/koralis-preview.jpg",
+        tags: [TAGS.NEXT, TAGS.TYPESCRIPT, TAGS.PRISMA],
+        featured: true
+    },
+    {
+        title: "Sistema de Gestión de Información Académica - Proyecto de Título",
+        description: `Plataforma web full-stack desarrollada como Proyecto de Título para la Universidad de Los Lagos. 
+        Sistema que permite a directores de carrera identificar proactivamente estudiantes en riesgo académico mediante 
+        dashboards interactivos y alertas automáticas. Transforma datos crudos en información accionable, facilitando 
+        decisiones estratégicas para mejorar la retención y el éxito estudiantil.`,
+        image: "/proyecto-titulo.jpg",
+        tags: [TAGS.NEXT, TAGS.TAILWIND, TAGS.TYPESCRIPT, TAGS.PRISMA],
+        featured: true
+    },
+    {
+        title: "Dr. Computín - Asistente Virtual para Problemas de Hardware",
+        description: `Desarrollado con Next.js, TailwindCSS y la API de OpenAI,
      Dr. Computín es una aplicación web diseñada para ayudar a usuarios con problemas de hardware 
      en sus computadoras. Utilizando la inteligencia artificial de OpenAI, Dr. Computín 
      ofrece asistencia y diagnósticos preliminares. Además, permite al usuario generar un resumen de su problema,
      que puede compartir con un técnico de confianza para facilitar la reparación.`,
-        link: "https://example.com",
         image: "/DrComputin.jpg",
         tags: [TAGS.NEXT, TAGS.TAILWIND, TAGS.OPENAI, TAGS.TYPESCRIPT, TAGS.PRISMA],
+        featured: false
     },
     {
         title: "Landing Page para Fanbooks, distribuidora de libros para colegios",
@@ -57,37 +77,63 @@ const PROJECTS = [
         link: "https://www.fanbooks.cl",
         image: "/fanbooks.png",
         tags: [TAGS.NEXT, TAGS.TAILWIND, TAGS.TYPESCRIPT],
+        featured: false
     }
 ]
 ---
 
 {
-    PROJECTS.map(({ title, description, link, image, tags }) => (
+    PROJECTS.map(({ title, description, link, image, tags, featured }) => (
         <div class="mb-10">
-            <article>
-                <h3 class="text-2xl font-semibold text-yellow-400/80">{title}</h3>
-                <p class="text-lg mb-4 text-pretty">{description}</p>
-                {/* <a href={link} target="_blank" rel="noopener" class="text-blue-500 hover:underline">
-                    {link}
-                </a> */}
-                <div class="flex gap-x-2 mt-2">
-                    <ul class="flex gap-x-2 flex-row">
-                        {tags.map(tag => (
-                        <li>
-                            
-                            <span 
-                            class={`flex align-center items-center gap-x-2 rounded-full text-sm font-medium ${tag.color} py-1 px-2 border-2 border-white/50 mb-5 hover:scale-110 transition-transform`}>
-                                <tag.icon class="size-6"/>
-                                {tag.name}
-                            </span>
-                        </li>
-                    ))}
-                    </ul>
+            <article class={featured ? "rounded-xl border-2 border-yellow-400/30 bg-yellow-400/5 p-6" : "p-4"}>
+                {featured && (
+                    <div class="mb-4">
+                        <span class="text-xs bg-yellow-400/20 text-yellow-400 px-3 py-1 rounded-full font-medium">
+                            ⭐ Proyecto Destacado
+                        </span>
+                    </div>
+                )}
+                
+                <!-- Layout Grid para desktop, stack para mobile -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                    <!-- Contenido del proyecto -->
+                    <div class="order-2 lg:order-1">
+                        <h3 class="text-2xl font-semibold text-yellow-400/80 mb-3">{title}</h3>
+                        <p class="text-base mb-4 text-pretty text-white/90 leading-relaxed">{description}</p>
+                        
+                        {link && (
+                            <a href={link} class="inline-flex items-center gap-2 text-purple-500 hover:text-purple-400 transition-colors mb-4 text-sm font-medium">
+                                {link.startsWith('/') ? 'Ver case study completo →' : 'Visitar sitio →'}
+                            </a>    
+                        )}
+                        
+                        <div class="flex gap-x-2 mt-4">
+                            <ul class="flex gap-x-2 flex-row flex-wrap gap-y-2">
+                                {tags.map(tag => (
+                                <li>
+                                    <span 
+                                    class={`flex align-center items-center gap-x-2 rounded-full text-xs font-medium ${tag.color} py-1 px-2 border-2 border-white/50 hover:scale-110 transition-transform`}>
+                                        <tag.icon class="size-5"/>
+                                        {tag.name}
+                                    </span>
+                                </li>
+                            ))}
+                            </ul>
+                        </div>
+                    </div>
                     
+                    <!-- Imagen del proyecto -->
+                    {image && (
+                        <div class="order-1 lg:order-2">
+                            <img 
+                                src={image} 
+                                alt={title} 
+                                class="rounded-lg shadow-2xl shadow-white/10 hover:scale-105 transition-transform w-full h-auto object-cover max-h-[400px] lg:max-h-[350px]" 
+                            />
+                        </div>
+                    )}
                 </div>
-                <img src={image} alt={title} class="rounded shadow-2xl shadow-white/10 hover:scale-105 transition-transform" />
             </article>
-            
         </div>
     ))
 }

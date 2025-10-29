@@ -1,7 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import '@fontsource-variable/montserrat';
+import '@fontsource-variable/montserrat/wght.css';
 interface Props {
 	title: string;
 	description: string;
@@ -20,12 +20,70 @@ const { title, description } = Astro.props;
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body class="absolute top-0 z-[-2] h-screen w-screen bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px]">
-		<div >
-		<Header />
-		<slot />
-		<Footer />
+	<body>
+		<!-- Cursor personalizado -->
+		<div id="custom-cursor" class="custom-cursor"></div>
+		
+		<!-- Contenedor para el fondo Vanta.js -->
+		<div id="vanta-bg" class="fixed top-0 left-0 w-full h-full -z-10 text-cyan-400"></div>
+		
+		<div class="relative z-10">
+			<Header />
+			<slot />
+			<Footer />
 		</div>
+
+		<!-- Script de Vanta.js -->
+		<script>
+			// @ts-ignore - Vanta no tiene tipos oficiales
+			import VANTA from 'vanta/dist/vanta.net.min';
+			// @ts-ignore
+			import * as THREE from 'three';
+
+			// Esperar a que el DOM esté completamente cargado
+			document.addEventListener('DOMContentLoaded', () => {
+				const vantaElement = document.getElementById('vanta-bg');
+				
+				if (vantaElement) {
+					try {
+						const vantaEffect = VANTA({
+							el: vantaElement,
+							THREE: THREE,
+							mouseControls: true,
+							touchControls: true,
+							gyroControls: false,
+							minHeight: 200.00,
+							minWidth: 200.00,
+							scale: 1.00,
+							scaleMobile: 1.00,
+							color: 0x007291, // Color violeta (purple-500)
+							backgroundColor: 0x00010D, // Negro oscuro
+							points: 12.00,
+							maxDistance: 20.00,
+							spacing: 15.00,
+							showDots: true
+						});
+
+						// Modificar el material de las líneas después de crear el efecto
+						setTimeout(() => {
+							if (vantaEffect && vantaEffect.scene) {
+								vantaEffect.scene.traverse((object: any) => {
+									if (object.material && object.material.color) {
+										// Cambiar color de líneas a violeta
+										object.material.color.setHex(0x007291);
+										object.material.opacity = 0.6;
+										object.material.transparent = true;
+									}
+								});
+							}
+						}, 100);
+
+					} catch (error) {
+						console.error('Error al cargar Vanta.js:', error);
+					}
+				}
+			});
+		</script>
 	</body>
 </html>
 <style is:global>
@@ -35,18 +93,68 @@ const { title, description } = Astro.props;
 	html {
 		font-family: 'Montserrat Variable', sans-serif;
 		scroll-behavior: smooth;
+		cursor: none; /* Ocultar cursor por defecto */
 	}
-	body {
-		color: #ffffff;
-		background-color: #050505;
-		display: flex;
-		min-height: 100vh;
-		flex-direction: column;
 
+	* {
+		cursor: none !important; /* Asegurar que todos los elementos oculten el cursor */
 	}
+
 	@media (prefers-reduced-motion: reduce) {
 		html {
 			scroll-behavior: auto;
 		}
 	}
+
+	/* Cursor personalizado */
+	.custom-cursor {
+		position: fixed;
+		width: 20px;
+		height: 20px;
+		background: linear-gradient(135deg, #87CEEB, #4FC3F7);
+		border-radius: 50%;
+		pointer-events: none;
+		z-index: 99999;
+		transform: translate(-50%, -50%);
+		transition: width 0.15s ease, height 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+		opacity: 0.9;
+		box-shadow: 0 0 20px rgba(135, 206, 235, 0.8), 0 0 40px rgba(79, 195, 247, 0.4);
+		mix-blend-mode: screen;
+	}
+
+	/* Cursor más grande en hover sobre elementos interactivos */
+	.custom-cursor.hover {
+		width: 35px;
+		height: 35px;
+		opacity: 1;
+		background: linear-gradient(135deg, #4FC3F7, #87CEEB);
+	}
 </style>
+
+<script>
+	// Script para mover el cursor personalizado
+	document.addEventListener('DOMContentLoaded', () => {
+		const cursor = document.getElementById('custom-cursor');
+		
+		if (cursor) {
+			// Seguir el movimiento del mouse
+			document.addEventListener('mousemove', (e) => {
+				cursor.style.left = `${e.clientX}px`;
+				cursor.style.top = `${e.clientY}px`;
+			});
+
+			// Agregar clase hover en elementos interactivos
+			const interactiveElements = document.querySelectorAll('a, button, [role="button"], .tech-card, input, textarea');
+			
+			interactiveElements.forEach(el => {
+				el.addEventListener('mouseenter', () => {
+					cursor.classList.add('hover');
+				});
+				
+				el.addEventListener('mouseleave', () => {
+					cursor.classList.remove('hover');
+				});
+			});
+		}
+	});
+</script>

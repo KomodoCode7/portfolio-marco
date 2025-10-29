@@ -1,0 +1,250 @@
+---
+const TIMELINE_EVENTS = [
+    {
+        year: "Jul 2025",
+        title: "Ingeniero de Software - ST Consultores",
+        description: "Desarrollo y arquitectura de soluciones empresariales escalables. Diseño de sistemas de gestión, optimización de procesos y consultoría técnica para clientes corporativos.",
+        highlight: true,
+        current: true
+    },
+    {
+        year: "Ago 2025",
+        title: "Titulado como Ingeniero Civil en Informática",
+        description: "Universidad de Los Lagos. Proyecto de Título: Sistema de Gestión de Información Académica con dashboards interactivos y alertas automáticas para identificar estudiantes en riesgo académico.",
+        highlight: true,
+        current: false
+    },
+    {
+        year: "Ene - Jun 2025",
+        title: "Desarrollador Web - Sotex S.P.A.",
+        description: "Desarrollo de sistemas web para optimización de procesos empresariales. Enfoque en arquitectura de datos, diseño de bases de datos con Prisma ORM, y desarrollo de plataformas eficientes.",
+        highlight: false,
+        current: false
+    },
+    {
+        year: "Sep - Dic 2024",
+        title: "Desarrollador Full Stack - Cafetería Panichini",
+        description: "Desarrollo e implementación de sistema de gestión documental en la nube utilizando OneDrive y Microsoft Graph API para optimización de procesos administrativos.",
+        highlight: false,
+        current: false
+    },
+    {
+        year: "Ago 2023 - Jun 2024",
+        title: "Encargado de Aseguramiento de Calidad (QA) - Sotex S.P.A.",
+        description: "Responsable de calidad del software. Diseño de estrategias de testing funcional, pruebas de caja negra, validación de requerimientos y coordinación con equipo de desarrollo.",
+        highlight: false,
+        current: false
+    },
+    {
+        year: "Ener - Jul 2023",
+        title: "Analista de Datos - ASECONEST LIMITADA",
+        description: "Inicio en la industria del software. Análisis de datos, soporte técnico a usuarios, generación de reportes y visualizaciones. Primera experiencia profesional mientras cursaba 3er año de Ingeniería Civil Informática.",
+        highlight: false,
+        current: false
+    },
+]
+---
+
+<div class="relative timeline-container">
+    <!-- Línea vertical animada -->
+    <svg class="absolute left-8 top-0 h-full w-0.5 timeline-line-svg" style="overflow: visible;">
+        <defs>
+            <linearGradient id="timeline-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#22d3ee;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#fbbf24;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        <line 
+            class="timeline-line" 
+            x1="1" 
+            y1="0" 
+            x2="1" 
+            y2="100%" 
+            stroke="url(#timeline-gradient)" 
+            stroke-width="2"
+            stroke-dasharray="1000"
+            stroke-dashoffset="1000"
+        />
+    </svg>
+    
+    <div class="space-y-8">
+        {TIMELINE_EVENTS.map((event, index) => (
+            <div class="relative pl-20 group timeline-item" data-index={index}>
+                <!-- Punto en la línea -->
+                <div class={`timeline-dot absolute left-6 w-5 h-5 rounded-full border-4 ${
+                    event.highlight 
+                        ? 'bg-yellow-400 border-yellow-400 shadow-lg shadow-yellow-400/50' 
+                        : 'bg-purple-500 border-purple-500'
+                } z-10`}></div>
+                
+                <!-- Contenido del evento -->
+                <div class={`timeline-card rounded-xl border p-6 transition-all duration-300 ${
+                    event.highlight
+                        ? 'border-yellow-400/30 bg-yellow-400/5 hover:border-yellow-400/50 hover:bg-yellow-400/10'
+                        : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/10'
+                } backdrop-blur-sm`}>
+                    <div class="flex items-center gap-3 mb-3 flex-wrap">
+                        <span class={`text-sm font-bold px-3 py-1 rounded-full ${
+                            event.highlight
+                                ? 'bg-yellow-400/20 text-yellow-400'
+                                : 'bg-purple-500/20 text-purple-500'
+                        }`}>
+                            {event.year}
+                        </span>
+                        {event.current && (
+                            <span class="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full font-medium pulse-badge">
+                                Actual
+                            </span>
+                        )}
+                        {event.highlight && !event.current && (
+                            <span class="text-xs bg-red-500/20 text-red-400 px-2 py-1 rounded-full">
+                                Destacado
+                            </span>
+                        )}
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3 leading-tight">
+                        {event.title}
+                    </h3>
+                    <p class="text-sm text-white/70 leading-relaxed">
+                        {event.description}
+                    </p>
+                </div>
+            </div>
+        ))}
+    </div>
+</div>
+
+<script>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+// Esperar a que el DOM esté listo
+document.addEventListener('DOMContentLoaded', () => {
+    // Animación de la línea principal del timeline
+    gsap.to('.timeline-line', {
+        strokeDashoffset: 0,
+        ease: 'none',
+        scrollTrigger: {
+            trigger: '.timeline-container',
+            start: 'top center',
+            end: 'bottom center',
+            scrub: 1,
+        }
+    });
+
+    // Animar cada item del timeline
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    
+    timelineItems.forEach((item) => {
+        const dot = item.querySelector('.timeline-dot');
+        const card = item.querySelector('.timeline-card');
+        
+        // Crear timeline de GSAP para cada item con ScrollTrigger
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: item,
+                start: 'top 80%',
+                end: 'top 20%',
+                toggleActions: 'play none none reverse',
+                // markers: true, // Descomenta para debug
+            }
+        });
+
+        // Animación del punto
+        tl.to(dot, {
+            scale: 1,
+            opacity: 1,
+            duration: 0.4,
+            ease: 'back.out(1.7)',
+        });
+
+        // Animación de la card (desde la izquierda)
+        tl.to(card, {
+            x: 0,
+            opacity: 1,
+            duration: 0.2,
+            ease: 'power3.out',
+        }, '-=0.2'); // Overlap con la animación anterior
+
+        // Hover effect en las cards
+        item.addEventListener('mouseenter', () => {
+            gsap.to(card, {
+                y: -5,
+                duration: 0.3,
+                ease: 'power2.out',
+            });
+            gsap.to(dot, {
+                y: -5,
+                scale: 1.2,
+                duration: 0.3,
+                ease: 'elastic.out(1, 0.3)',
+            });
+        });
+
+        item.addEventListener('mouseleave', () => {
+            gsap.to(card, {
+                y: 0,
+                duration: 0.3,
+                ease: 'power2.out',
+            });
+            gsap.to(dot, {
+                y: 0,
+                scale: 1,
+                duration: 0.3,
+                ease: 'elastic.out(1, 0.3)',
+            });
+        });
+    });
+
+    // Animación del badge "Actual"
+    const pulseBadge = document.querySelector('.pulse-badge');
+    if (pulseBadge) {
+        gsap.to(pulseBadge, {
+            scale: 1.05,
+            duration: 1,
+            repeat: -1,
+            yoyo: true,
+            ease: 'power1.inOut',
+        });
+    }
+});
+</script>
+
+<style>
+    .timeline-container {
+        position: relative;
+    }
+
+    .timeline-line-svg {
+        pointer-events: none;
+    }
+
+    /* Estado inicial oculto con CSS para evitar FOUC */
+    .timeline-dot {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    .timeline-card {
+        transform-origin: left center;
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    /* Mejora visual para el badge actual */
+    .pulse-badge {
+        animation: subtle-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes subtle-pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.7;
+        }
+    }
+</style>

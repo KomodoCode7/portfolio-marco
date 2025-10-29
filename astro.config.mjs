@@ -6,8 +6,13 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   integrations: [tailwind()],
   vite: {
+    resolve: {
+      alias: {
+        '@': '/src'
+      }
+    },
     ssr: {
-      noExternal: ['@fontsource-variable/montserrat'] // Especifica el paquete que necesita ser excluido del procesamiento en SSR
+      noExternal: ['@fontsource-variable/montserrat', 'gsap'] // Especifica el paquete que necesita ser excluido del procesamiento en SSR
     }
   }
 });
