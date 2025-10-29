@@ -2,7 +2,7 @@
 const TIMELINE_EVENTS = [
     {
         year: "Jul 2025",
-        title: "Desarrollador Principal - ST Consultores",
+        title: "Ingeniero de Software - ST Consultores",
         description: "Desarrollo y arquitectura de soluciones empresariales escalables. Diseño de sistemas de gestión, optimización de procesos y consultoría técnica para clientes corporativos.",
         highlight: true,
         current: true
@@ -16,7 +16,7 @@ const TIMELINE_EVENTS = [
     },
     {
         year: "Ene - Jun 2025",
-        title: "Desarrollador de Software Jr - Sotex S.P.A.",
+        title: "Desarrollador Web - Sotex S.P.A.",
         description: "Desarrollo de sistemas web para optimización de procesos empresariales. Enfoque en arquitectura de datos, diseño de bases de datos con Prisma ORM, y desarrollo de plataformas eficientes.",
         highlight: false,
         current: false
@@ -36,19 +36,12 @@ const TIMELINE_EVENTS = [
         current: false
     },
     {
-        year: "Mar - Jul 2023",
+        year: "Ener - Jul 2023",
         title: "Analista de Datos - Sotex S.P.A.",
-        description: "Inicio en la industria del software. Análisis de datos, generación de reportes y visualizaciones. Primera experiencia profesional mientras cursaba 3er año de Ingeniería Civil Informática.",
+        description: "Inicio en la industria del software. Análisis de datos, soporte técnico a usuarios, generación de reportes y visualizaciones. Primera experiencia profesional mientras cursaba 3er año de Ingeniería Civil Informática.",
         highlight: false,
         current: false
     },
-    {
-        year: "Mar 2020 - Ago 2025",
-        title: "Ingeniería Civil en Informática - Universidad de Los Lagos",
-        description: "Formación integral en desarrollo de software y arquitectura de sistemas. Trabajando profesionalmente en el área de sistemas desde 3er año (2023), combinando teoría académica con práctica industrial.",
-        highlight: true,
-        current: false
-    }
 ]
 ---
 
@@ -82,7 +75,7 @@ const TIMELINE_EVENTS = [
                 <div class={`timeline-dot absolute left-6 w-5 h-5 rounded-full border-4 ${
                     event.highlight 
                         ? 'bg-yellow-400 border-yellow-400 shadow-lg shadow-yellow-400/50' 
-                        : 'bg-cyan-500 border-cyan-500'
+                        : 'bg-purple-500 border-purple-500'
                 } z-10`}></div>
                 
                 <!-- Contenido del evento -->
@@ -95,7 +88,7 @@ const TIMELINE_EVENTS = [
                         <span class={`text-sm font-bold px-3 py-1 rounded-full ${
                             event.highlight
                                 ? 'bg-yellow-400/20 text-yellow-400'
-                                : 'bg-cyan-500/20 text-cyan-400'
+                                : 'bg-purple-500/20 text-purple-500'
                         }`}>
                             {event.year}
                         </span>
@@ -149,8 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const dot = item.querySelector('.timeline-dot');
         const card = item.querySelector('.timeline-card');
         
-        // Guardar estado inicial visible
-        gsap.set([dot, card], { clearProps: 'all' });
+        // Setear estado inicial invisible ANTES de crear la timeline
+        gsap.set(dot, { scale: 0, opacity: 0 });
+        gsap.set(card, { x: -30, opacity: 0 });
         
         // Crear timeline de GSAP para cada item
         const tl = gsap.timeline({
@@ -161,21 +155,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Animación del punto (desde estado invisible)
-        gsap.set(dot, { scale: 0, opacity: 0 });
+        // Animación del punto
         tl.to(dot, {
             scale: 1,
             opacity: 1,
-            duration: 0.2,
+            duration: 0.4,
             ease: 'back.out(1.7)',
         });
 
         // Animación de la card (desde la izquierda)
-        gsap.set(card, { x: -30, opacity: 0 });
         tl.to(card, {
             x: 0,
             opacity: 1,
-            duration: 0.3,
+            duration: 0.6,
             ease: 'power3.out',
         }, '-=0.3'); // Overlap con la animación anterior
 

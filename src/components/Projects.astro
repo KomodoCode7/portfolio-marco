@@ -13,7 +13,7 @@ const TAGS = {
     },
     TAILWIND: {
         name: "TailwindCSS",
-        color: "bg-blue-600 text-white",
+        color: "bg-purple-600 text-white",
         icon: Tailwind
     },
     JAVASCRIPT: {
@@ -23,7 +23,7 @@ const TAGS = {
     },
     TYPESCRIPT: {
         name: "TypeScript",
-        color: "bg-white text-blue-500",
+        color: "bg-white text-purple-500",
         icon: Typescript
     },
     OPENAI: {
@@ -97,8 +97,8 @@ const PROJECTS = [
                     </div>
                 )}
                 <h3 class="text-2xl font-semibold text-yellow-400/80">{title}</h3>
-                <p class="text-lg mb-4 text-pretty">{description}</p>
-                <a href={link} class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors mb-4 text-sm font-medium">
+                <p class="text-lg mb-4 text-pretty text-white">{description}</p>
+                <a href={link} class="inline-flex items-center gap-2 text-purple-500 hover:text-purple-400 transition-colors mb-4 text-sm font-medium">
                     {link.startsWith('/') ? 'Ver case study completo →' : 'Visitar sitio →'}
                 </a>
                 <div class="flex gap-x-2 mt-2">

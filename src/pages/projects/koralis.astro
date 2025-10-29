@@ -7,10 +7,10 @@ import Prisma from '../../components/icons/Prisma.astro';
 import Azure from '../../components/icons/Azure.astro';
 
 const TECH_STACK = [
-    { name: "Next.js", icon: Nextjs, color: "from-cyan-500 to-blue-500" },
+    { name: "Next.js", icon: Nextjs, color: "from-purple-500 to-purple-500" },
     { name: "NestJS", icon: Typescript, color: "from-red-500 to-pink-500" },
     { name: "PostgreSQL/Neon", icon: Prisma, color: "from-purple-500 to-indigo-500" },
-    { name: "Cloud Run", icon: Azure, color: "from-blue-500 to-cyan-500" },
+    { name: "Cloud Run", icon: Azure, color: "from-purple-500 to-purple-500" },
     { name: "Cloudflare R2", icon: Azure, color: "from-orange-500 to-yellow-500" },
     { name: "MS Entra ID", icon: Azure, color: "from-green-500 to-emerald-500" }
 ]
@@ -84,7 +84,7 @@ const TECHNICAL_DECISIONS = [
     <main class="px-4">
         <!-- Hero Section -->
         <SectionContainer class="py-16 max-w-[1000px]">
-            <a href="/" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors mb-8">
+            <a href="/" class="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors mb-8">
                 <svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
                     <path d="M15 18l-6-6 6-6"/>
                 </svg>
@@ -97,7 +97,7 @@ const TECHNICAL_DECISIONS = [
                 </span>
             </div>
 
-            <h1 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-yellow-400 to-red-400 mb-6">
+            <h1 class="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-yellow-400 to-red-400 mb-6">
                 Koralis & Remoras
             </h1>
             
@@ -135,8 +135,8 @@ const TECHNICAL_DECISIONS = [
                 </p>
 
                 <div class="grid md:grid-cols-2 gap-6">
-                    <div class="rounded-lg border border-cyan-500/30 bg-cyan-500/5 p-6">
-                        <h3 class="text-xl font-bold text-cyan-400 mb-3">Usuario Principal</h3>
+                    <div class="rounded-lg border border-purple-500/30 bg-purple-500/5 p-6">
+                        <h3 class="text-xl font-bold text-purple-400 mb-3">Usuario Principal</h3>
                         <p class="text-white/70 text-sm leading-relaxed">
                             Empresas de logística marítima que gestionan cotizaciones de servicios, 
                             operaciones de embarque, documentación de carga y contabilidad de proyectos.
@@ -189,9 +189,9 @@ const TECHNICAL_DECISIONS = [
 
             <div class="space-y-6">
                 {CHALLENGES.map((item, index) => (
-                    <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all">
+                    <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm hover:border-purple-500/30 hover:bg-purple-500/5 transition-all">
                         <div class="flex items-start gap-4">
-                            <div class="text-2xl font-bold text-cyan-400 mt-1">
+                            <div class="text-2xl font-bold text-purple-400 mt-1">
                                 {index + 1}
                             </div>
                             <div class="flex-1">
@@ -246,7 +246,7 @@ const TECHNICAL_DECISIONS = [
                 Arquitectura del Sistema
             </h2>
 
-            <div class="rounded-xl border border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 p-8 backdrop-blur-sm">
+            <div class="rounded-xl border border-purple-500/30 bg-gradient-to-br from-purple-500/5 to-purple-500/5 p-8 backdrop-blur-sm">
                 <pre class="text-sm text-white/80 font-mono leading-relaxed overflow-x-auto">
 {`┌─────────────────────────────────────────────────┐
 │          FRONTEND (Next.js + React)             │
@@ -296,7 +296,7 @@ const TECHNICAL_DECISIONS = [
 
             <div class="space-y-4">
                 <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-                    <h3 class="text-lg font-bold text-cyan-400 mb-2">
+                    <h3 class="text-lg font-bold text-purple-400 mb-2">
                         Neon Branching cambió la forma de gestionar entornos
                     </h3>
                     <p class="text-white/70 text-sm leading-relaxed">
@@ -307,7 +307,7 @@ const TECHNICAL_DECISIONS = [
                 </div>
 
                 <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-                    <h3 class="text-lg font-bold text-cyan-400 mb-2">
+                    <h3 class="text-lg font-bold text-purple-400 mb-2">
                         Cloud Run es ideal para tráfico irregular
                     </h3>
                     <p class="text-white/70 text-sm leading-relaxed">
@@ -318,7 +318,7 @@ const TECHNICAL_DECISIONS = [
                 </div>
 
                 <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-                    <h3 class="text-lg font-bold text-cyan-400 mb-2">
+                    <h3 class="text-lg font-bold text-purple-400 mb-2">
                         La integración con sistemas legacy es el 70% del trabajo
                     </h3>
                     <p class="text-white/70 text-sm leading-relaxed">
@@ -329,7 +329,7 @@ const TECHNICAL_DECISIONS = [
                 </div>
 
                 <div class="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-                    <h3 class="text-lg font-bold text-cyan-400 mb-2">
+                    <h3 class="text-lg font-bold text-purple-400 mb-2">
                         MS Entra ID es complejo pero vale la pena para empresas
                     </h3>
                     <p class="text-white/70 text-sm leading-relaxed">
