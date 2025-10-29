@@ -25,7 +25,7 @@ const { title, description } = Astro.props;
 		<div id="custom-cursor" class="custom-cursor"></div>
 		
 		<!-- Contenedor para el fondo Vanta.js -->
-		<div id="vanta-bg" class="fixed top-0 left-0 w-full h-full -z-10"></div>
+		<div id="vanta-bg" class="fixed top-0 left-0 w-full h-full -z-5 vanta-container"></div>
 		
 		<div class="relative z-10 backdrop-blur-[1px]">
 			<Header />
@@ -90,10 +90,18 @@ const { title, description } = Astro.props;
 	::root {
 		color-scheme: light dark;
 	}
+	
 	html {
 		font-family: 'Montserrat Variable', sans-serif;
 		scroll-behavior: smooth;
 		cursor: none; /* Ocultar cursor por defecto */
+		background-color: #00010D; /* Fondo oscuro mientras carga Vanta */
+	}
+
+	body {
+		background-color: #00010D; /* Mismo color que Vanta backgroundColor */
+		margin: 0;
+		padding: 0;
 	}
 
 	* {
@@ -129,6 +137,83 @@ const { title, description } = Astro.props;
 		opacity: 1;
 		background: linear-gradient(135deg, #4FC3F7, #87CEEB);
 	}
+
+	/* Contenedor de Vanta.js */
+	.vanta-container {
+		background-color: #00010D; /* Color de fondo mientras carga */
+		opacity: 0;
+		animation: fadeInVanta 0.8s ease-in forwards;
+		animation-delay: 0.2s;
+	}
+
+	@keyframes fadeInVanta {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	/* Prevenir FOUC (Flash of Unstyled Content) - Ocultar elementos antes de animaciones GSAP */
+	.timeline-dot {
+		opacity: 0;
+		transform: scale(0);
+	}
+
+	.timeline-card {
+		opacity: 0;
+		transform: translateX(-20px);
+	}
+
+	.tech-card {
+		opacity: 0;
+	}
+
+	/* Hero section - ocultar todo hasta que GSAP lo anime */
+	.hero-photo,
+	.hero-badge,
+	.hero-contact a,
+	.hero-title h1,
+	.hero-title h2, 
+	.hero-title p,
+	.hero-cards > div,
+	.hero-summary {
+		opacity: 0;
+	}
+
+	/* Ocultar todo el contenedor de métricas para que aparezca todo junto */
+	.hero-metrics > div {
+		opacity: 0;
+	}
+
+	/* Barra púrpura - comenzar sin altura */
+	.hero-title {
+		position: relative;
+	}
+
+	.hero-title::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 4px;
+		height: 0;
+		background-color: rgb(168, 85, 247); /* purple-500 */
+		transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	/* Cuando GSAP active la animación, la barra crecerá */
+	.hero-title.animate-border::before {
+		height: 100%;
+	}
+
+	/* Quitar el border-l original cuando usamos ::before */
+	.hero-title.animate-border {
+		border-left: none !important;
+	}
+
+	/* Los elementos se mostrarán cuando GSAP los anime */
 </style>
 
 <script>
