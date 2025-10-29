@@ -94,28 +94,28 @@ description="Ingeniero Civil Informático titulado (2025) con experiencia desde 
 
 						<!-- Datos Clave -->
 						<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 hero-cards">
-							<div class="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-3 border border-white/10 backdrop-blur-sm">
+							<div class="flex items-center gap-3 bg-white/10 rounded-lg px-4 py-3 border border-white/20 backdrop-blur-sm">
 								<Location class="w-6 h-6" style={{color: "#ffffff" }} />
 								<div>
 									<p class="text-xs text-white/50 uppercase tracking-wide">Ubicación</p>
 									<p class="text-sm font-medium text-white">Puerto Montt / Osorno, Chile</p>
 								</div>
 							</div>
-							<div class="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-3 border border-white/10 backdrop-blur-sm">
+							<div class="flex items-center gap-3 bg-white/10 rounded-lg px-4 py-3 border border-white/20 backdrop-blur-sm">
 								<Graduation class="w-6 h-6" style={{color: "#ffffff" }} />
 								<div>
 									<p class="text-xs text-white/50 uppercase tracking-wide">Titulación</p>
 									<p class="text-sm font-medium text-white">Agosto 2025 - ULagos</p>
 								</div>
 							</div>
-							<div class="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-3 border border-white/10 backdrop-blur-sm">
+							<div class="flex items-center gap-3 bg-white/10 rounded-lg px-4 py-3 border border-white/20 backdrop-blur-sm">
 								<Briefcase class="w-6 h-6" style={{color: "#ffffff" }} />
 								<div>
 									<p class="text-xs text-white/50 uppercase tracking-wide">Posición Actual</p>
 									<p class="text-sm font-medium text-white">Desarrollador Principal - ST Consultores</p>
 								</div>
 							</div>
-							<div class="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-3 border border-white/10 backdrop-blur-sm">
+							<div class="flex items-center gap-3 bg-white/10 rounded-lg px-4 py-3 border border-white/20 backdrop-blur-sm">
 								<Chart class="w-6 h-6" style={{color: "#ffffff" }} />
 								<div>
 									<p class="text-xs text-white/50 uppercase tracking-wide">Experiencia Laboral</p>
@@ -125,7 +125,7 @@ description="Ingeniero Civil Informático titulado (2025) con experiencia desde 
 						</div>
 
 						<!-- Resumen Profesional -->
-						<div class="hero-summary bg-gradient-to-br from-purple-500/5 to-purple-500/5 border border-purple-500/10 rounded-xl p-4 backdrop-blur-sm">
+						<div class="hero-summary bg-gradient-to-br from-purple-500/10 to-purple-500/10 border border-purple-500/20 rounded-xl p-4 backdrop-blur-sm">
 							<h3 class="text-sm font-bold text-purple-500 uppercase tracking-wide mb-3">Perfil Profesional</h3>
 							<p class="text-base text-white/90 leading-relaxed mb-4">
 								Ingeniero Civil Informático titulado con <strong>experiencia laboral en la industria desde 2023</strong>.
@@ -177,11 +177,18 @@ description="Ingeniero Civil Informático titulado (2025) con experiencia desde 
 
 					// 4. Título y subtítulo (reveal desde izquierda)
 					gsap.set('.hero-title h1, .hero-title h2, .hero-title p', { opacity: 0, x: -30 });
+					
+					// Animar barra púrpura primero
+					const heroTitle = document.querySelector('.hero-title');
+					if (heroTitle) {
+						heroTitle.classList.add('animate-border');
+					}
+					
 					masterTl.to('.hero-title h1', {
 						opacity: 1,
 						x: 0,
 						duration: 0.7,
-					}, '-=0.5');
+					}, '-=0.3');
 
 					masterTl.to('.hero-title h2', {
 						opacity: 1,
@@ -213,13 +220,15 @@ description="Ingeniero Civil Informático titulado (2025) con experiencia desde 
 					}, '-=0.3');
 
 					// 7. Métricas con animación de contador
+					const metricsContainers = document.querySelectorAll('.hero-metrics > div');
 					const metrics = document.querySelectorAll('.metric-value');
-					gsap.set(metrics, { opacity: 0, y: 20 });
 					
-					masterTl.to(metrics, {
+					gsap.set(metricsContainers, { opacity: 0, y: 20 });
+					
+					masterTl.to(metricsContainers, {
 						opacity: 1,
 						y: 0,
-						duration: 0.3,
+						duration: 0.5,
 						stagger: 0.15,
 						onStart: () => {
 							// Animar los contadores
