@@ -11,6 +11,9 @@ export default defineConfig({
     sitemap()
   ],
   vite: {
+    build: {
+      sourcemap: false, // Desactiva source maps en producción
+    },
     resolve: {
       alias: {
         '@': '/src'
