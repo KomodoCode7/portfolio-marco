@@ -14,11 +14,73 @@ const { title, description } = Astro.props;
 <html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="generator" content={Astro.generator} />
+		
+		<!-- Preconnect para mejorar performance -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+		<link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+		
+		<!-- SEO Meta Tags -->
 		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="keywords" content="Marco Molina, Ingeniero Civil Informático, Desarrollador Full Stack, NestJS, Next.js, PostgreSQL, Cloud Run, desarrollador Chile, programador, portfolio" />
+		<meta name="author" content="Marco Molina" />
+		<meta name="robots" content="index, follow" />
+		<meta name="theme-color" content="#00010D" />
+		<link rel="canonical" href="https://marcomolina.cl" />
+		
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://marcomolina.cl/" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content="https://marcomolina.cl/og-image.jpg" />
+		<meta property="og:image:alt" content="Marco Molina - Ingeniero Civil Informático" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:locale" content="es_CL" />
+		<meta property="og:site_name" content="Marco Molina - Portfolio" />
+		
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:url" content="https://marcomolina.cl/" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content="https://marcomolina.cl/og-image.jpg" />
+		<meta name="twitter:image:alt" content="Marco Molina - Ingeniero Civil Informático" />
+		
+		<!-- Favicon -->
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		
+		<!-- Structured Data (JSON-LD) -->
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Person",
+			"name": "Marco Antonio Molina",
+			"jobTitle": "Ingeniero Civil Informático",
+			"description": "Desarrollador Full Stack especializado en NestJS, Next.js, PostgreSQL y tecnologías cloud",
+			"url": "https://marcomolina.cl",
+			"sameAs": [
+				"https://www.linkedin.com/in/marco-molina-b0199a214/",
+				"https://github.com/KomodoCode7"
+			],
+			"email": "marcoantonio.molina2001@gmail.com",
+			"alumniOf": {
+				"@type": "Organization",
+				"name": "Universidad de Los Lagos"
+			},
+			"knowsAbout": [
+				"NestJS",
+				"Next.js",
+				"PostgreSQL",
+				"TypeScript",
+				"Cloud Computing",
+				"Full Stack Development"
+			]
+		}
+		</script>
 	</head>
 	<body>
 		<!-- Cursor personalizado -->
@@ -33,15 +95,33 @@ const { title, description } = Astro.props;
 			<Footer />
 		</div>
 
-		<!-- Script de Vanta.js -->
+		<!-- Script de Vanta.js - Solo en Desktop para mejor performance en mobile -->
 		<script>
 			// @ts-ignore - Vanta no tiene tipos oficiales
 			import VANTA from 'vanta/dist/vanta.net.min';
 			// @ts-ignore
 			import * as THREE from 'three';
 
-			// Esperar a que el DOM esté completamente cargado
-			document.addEventListener('DOMContentLoaded', () => {
+			// Detectar si es dispositivo móvil
+			const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || 
+			                 window.innerWidth < 1024;
+
+			if (!isMobile) {
+				// Desktop: Cargar Vanta después del contenido principal
+				if ('requestIdleCallback' in window) {
+					requestIdleCallback(() => initVanta());
+				} else {
+					setTimeout(() => initVanta(), 1000);
+				}
+			} else {
+				// Mobile: Usar fondo gradiente CSS (más ligero)
+				const vantaBg = document.getElementById('vanta-bg');
+				if (vantaBg) {
+					vantaBg.classList.add('mobile-gradient');
+				}
+			}
+
+			function initVanta() {
 				const vantaElement = document.getElementById('vanta-bg');
 				
 				if (vantaElement) {
@@ -50,7 +130,7 @@ const { title, description } = Astro.props;
 							el: vantaElement,
 							THREE: THREE,
 							mouseControls: true,
-							touchControls: true,
+							touchControls: false,
 							gyroControls: false,
 							minHeight: 200.00,
 							minWidth: 200.00,
@@ -58,9 +138,9 @@ const { title, description } = Astro.props;
 							scaleMobile: 1.00,
 							color: 0x007291, // Color violeta (purple-500)
 							backgroundColor: 0x00010D, // Negro oscuro
-							points: 12.00,
-							maxDistance: 20.00,
-							spacing: 15.00,
+							points: 10.00, // Reducido de 12 para mejor performance
+							maxDistance: 18.00, // Reducido de 20
+							spacing: 16.00, // Aumentado de 15
 							showDots: true
 						});
 
@@ -82,7 +162,7 @@ const { title, description } = Astro.props;
 						console.error('Error al cargar Vanta.js:', error);
 					}
 				}
-			});
+			}
 		</script>
 	</body>
 </html>
@@ -146,12 +226,30 @@ const { title, description } = Astro.props;
 		animation-delay: 0.2s;
 	}
 
+	/* Mobile: Fondo gradiente animado con CSS (sin Vanta.js) */
+	.mobile-gradient {
+		background: radial-gradient(ellipse at 50% 30%, #007291 0%, #00010D 60%);
+		animation: fadeInVanta 0.8s ease-in forwards, pulse 8s ease-in-out infinite;
+		animation-delay: 0.2s, 0.8s;
+	}
+
 	@keyframes fadeInVanta {
 		from {
 			opacity: 0;
 		}
 		to {
 			opacity: 1;
+		}
+	}
+
+	@keyframes pulse {
+		0%, 100% { 
+			opacity: 0.8;
+			transform: scale(1);
+		}
+		50% { 
+			opacity: 1;
+			transform: scale(1.02);
 		}
 	}
 
@@ -177,6 +275,9 @@ const { title, description } = Astro.props;
 	.hero-title h1,
 	.hero-title h2, 
 	.hero-title p,
+	.hero-title-mobile h1,
+	.hero-title-mobile h2,
+	.hero-title-mobile p,
 	.hero-cards > div,
 	.hero-summary {
 		opacity: 0;

@@ -70,9 +70,9 @@ const TIMELINE_EVENTS = [
     
     <div class="space-y-8">
         {TIMELINE_EVENTS.map((event, index) => (
-            <div class="relative pl-20 group timeline-item" data-index={index}>
+            <div class="relative pt-2 md:pl-20 group timeline-item" data-index={index}>
                 <!-- Punto en la línea -->
-                <div class={`timeline-dot absolute left-6 w-5 h-5 rounded-full border-4 ${
+                <div class={`timeline-dot absolute -top-5 left-2 md:left-6 w-5 h-5 rounded-full border-4 ${
                     event.highlight 
                         ? 'bg-yellow-400 border-yellow-400 shadow-lg shadow-yellow-400/50' 
                         : 'bg-purple-500 border-purple-500'
