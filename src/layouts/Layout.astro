@@ -95,72 +95,115 @@ const { title, description } = Astro.props;
 			<Footer />
 		</div>
 
-		<!-- Script de Vanta.js - Solo en Desktop para mejor performance en mobile -->
+		<!-- Script de Vanta.js - Carga diferida para mejor performance -->
 		<script>
-			// @ts-ignore - Vanta no tiene tipos oficiales
-			import VANTA from 'vanta/dist/vanta.net.min';
-			// @ts-ignore
-			import * as THREE from 'three';
-
 			// Detectar si es dispositivo móvil
 			const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || 
 			                 window.innerWidth < 1024;
 
+			let vantaLoaded = false;
+
 			if (!isMobile) {
-				// Desktop: Cargar Vanta después del contenido principal
-				if ('requestIdleCallback' in window) {
-					requestIdleCallback(() => initVanta());
-				} else {
-					setTimeout(() => initVanta(), 1000);
-				}
+				// Desktop: Cargar Vanta solo después de interacción del usuario o scroll
+				const loadVanta = () => {
+					if (vantaLoaded) return;
+					vantaLoaded = true;
+
+					const vantaElement = document.getElementById('vanta-bg');
+					if (!vantaElement) return;
+
+					// Cargar dinámicamente Vanta.js y Three.js
+					Promise.all([
+						// @ts-ignore
+						import('vanta/dist/vanta.net.min'),
+						// @ts-ignore
+						import('three')
+					]).then(([VANTA_MODULE, THREE_MODULE]) => {
+						const VANTA = VANTA_MODULE.default;
+						const THREE = THREE_MODULE;
+						
+						try {
+							// Iniciar Vanta oculto
+							vantaElement.style.opacity = '0';
+							
+							const vantaEffect = VANTA({
+								el: vantaElement,
+								THREE: THREE,
+								mouseControls: true,
+								touchControls: false,
+								gyroControls: false,
+								minHeight: 200.00,
+								minWidth: 200.00,
+								scale: 1.00,
+								scaleMobile: 1.00,
+								color: 0x007291, // Color cyan/violeta
+								backgroundColor: 0x00010D, // Negro oscuro
+								points: 10.00,
+								maxDistance: 18.00,
+								spacing: 16.00,
+								showDots: true
+							});
+
+							// Esperar a que Vanta renderice completamente y luego hacer fade-in
+							setTimeout(() => {
+								// Aplicar estilos al canvas
+								if (vantaEffect && vantaEffect.scene) {
+									// Configurar materiales con el color correcto
+									vantaEffect.scene.traverse((object: any) => {
+										if (object.material && object.material.color) {
+											object.material.color.setHex(0x007291);
+											object.material.opacity = 0.6;
+											object.material.transparent = true;
+										}
+									});
+								}
+
+								// Fade-in suave después de configurar
+								setTimeout(() => {
+									vantaElement.style.transition = 'opacity 1.5s ease-in-out';
+									vantaElement.style.opacity = '1';
+								}, 100);
+							}, 300);
+
+						} catch (error) {
+							console.error('Error al cargar Vanta.js:', error);
+							// En caso de error, mostrar el fondo de todas formas
+							vantaElement.style.opacity = '1';
+						}
+					}).catch(error => {
+						console.error('Error al importar Vanta:', error);
+						// En caso de error, mostrar el fondo
+						if (vantaElement) {
+							vantaElement.style.opacity = '1';
+						}
+					});
+				};
+
+				// Cargar después de 2 segundos o al hacer scroll (lo que ocurra primero)
+				let scrollListener: (() => void) | null = null;
+				
+				const initTimeout = setTimeout(() => {
+					loadVanta();
+					if (scrollListener) {
+						window.removeEventListener('scroll', scrollListener);
+					}
+				}, 2000);
+
+				scrollListener = () => {
+					clearTimeout(initTimeout);
+					loadVanta();
+					if (scrollListener) {
+						window.removeEventListener('scroll', scrollListener);
+					}
+				};
+
+				window.addEventListener('scroll', scrollListener, { once: true, passive: true });
+
 			} else {
 				// Mobile: Usar fondo gradiente CSS (más ligero)
 				const vantaBg = document.getElementById('vanta-bg');
 				if (vantaBg) {
 					vantaBg.classList.add('mobile-gradient');
-				}
-			}
-
-			function initVanta() {
-				const vantaElement = document.getElementById('vanta-bg');
-				
-				if (vantaElement) {
-					try {
-						const vantaEffect = VANTA({
-							el: vantaElement,
-							THREE: THREE,
-							mouseControls: true,
-							touchControls: false,
-							gyroControls: false,
-							minHeight: 200.00,
-							minWidth: 200.00,
-							scale: 1.00,
-							scaleMobile: 1.00,
-							color: 0x007291, // Color violeta (purple-500)
-							backgroundColor: 0x00010D, // Negro oscuro
-							points: 10.00, // Reducido de 12 para mejor performance
-							maxDistance: 18.00, // Reducido de 20
-							spacing: 16.00, // Aumentado de 15
-							showDots: true
-						});
-
-						// Modificar el material de las líneas después de crear el efecto
-						setTimeout(() => {
-							if (vantaEffect && vantaEffect.scene) {
-								vantaEffect.scene.traverse((object: any) => {
-									if (object.material && object.material.color) {
-										// Cambiar color de líneas a violeta
-										object.material.color.setHex(0x007291);
-										object.material.opacity = 0.6;
-										object.material.transparent = true;
-									}
-								});
-							}
-						}, 100);
-
-					} catch (error) {
-						console.error('Error al cargar Vanta.js:', error);
-					}
 				}
 			}
 		</script>
@@ -221,14 +264,19 @@ const { title, description } = Astro.props;
 	/* Contenedor de Vanta.js */
 	.vanta-container {
 		background-color: #00010D; /* Color de fondo mientras carga */
-		opacity: 0;
-		animation: fadeInVanta 0.8s ease-in forwards;
-		animation-delay: 0.2s;
+		will-change: opacity; /* Optimización para animación */
+	}
+
+	/* Canvas de Vanta con transición suave */
+	.vanta-container canvas {
+		opacity: inherit;
+		transition: opacity 0.5s ease-in-out;
 	}
 
 	/* Mobile: Fondo gradiente animado con CSS (sin Vanta.js) */
 	.mobile-gradient {
 		background: radial-gradient(ellipse at 50% 30%, #007291 0%, #00010D 60%);
+		opacity: 1 !important;
 		animation: fadeInVanta 0.8s ease-in forwards, pulse 8s ease-in-out infinite;
 		animation-delay: 0.2s, 0.8s;
 	}
