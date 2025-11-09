@@ -1,4 +1,13 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /_astro/
 
 Sitemap: https://marcomolina.cl/sitemap-index.xml
+
+# Crawl-delay para bots más lentos
+User-agent: Googlebot
+Crawl-delay: 0
+
+User-agent: Bingbot
+Crawl-delay: 1

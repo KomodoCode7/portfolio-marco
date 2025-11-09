@@ -24,11 +24,15 @@ const { title, description } = Astro.props;
 		<!-- SEO Meta Tags -->
 		<title>{title}</title>
 		<meta name="description" content={description} />
-		<meta name="keywords" content="Marco Molina, Ingeniero Civil Informático, Desarrollador Full Stack, NestJS, Next.js, PostgreSQL, Cloud Run, desarrollador Chile, programador, portfolio" />
-		<meta name="author" content="Marco Molina" />
+		<meta name="keywords" content="Marco Molina, Marco Antonio Molina, Ingeniero Civil Informático, Desarrollador Full Stack, NestJS, Next.js, PostgreSQL, TypeScript, Prisma, Cloud Run, Google Cloud, desarrollador Chile, programador Chile, desarrollador Osorno, ingeniero informático Chile, arquitectura cloud, sistemas web, desarrollo backend, desarrollo frontend, portfolio desarrollador" />
+		<meta name="author" content="Marco Antonio Molina" />
 		<meta name="robots" content="index, follow" />
 		<meta name="theme-color" content="#00010D" />
 		<link rel="canonical" href="https://marcomolina.cl" />
+		<meta name="geo.region" content="CL-LL" />
+		<meta name="geo.placename" content="Osorno" />
+		<meta name="geo.position" content="-40.5735;-73.1349" />
+		<meta name="ICBM" content="-40.5735, -73.1349" />
 		
 		<!-- Open Graph / Facebook -->
 		<meta property="og:type" content="website" />
@@ -59,26 +63,54 @@ const { title, description } = Astro.props;
 			"@context": "https://schema.org",
 			"@type": "Person",
 			"name": "Marco Antonio Molina",
+			"alternateName": "Marco Molina",
 			"jobTitle": "Ingeniero Civil Informático",
-			"description": "Desarrollador Full Stack especializado en NestJS, Next.js, PostgreSQL y tecnologías cloud",
+			"description": "Desarrollador Full Stack especializado en NestJS, Next.js, PostgreSQL y tecnologías cloud. Ingeniero Civil Informático con experiencia en arquitectura de sistemas escalables y desarrollo web moderno.",
 			"url": "https://marcomolina.cl",
+			"image": "https://marcomolina.cl/1754233231550.webp",
 			"sameAs": [
 				"https://www.linkedin.com/in/marco-molina-b0199a214/",
 				"https://github.com/KomodoCode7"
 			],
 			"email": "marcoantonio.molina2001@gmail.com",
+			"telephone": "+56-XXX-XXX-XXX",
+			"address": {
+				"@type": "PostalAddress",
+				"addressLocality": "Osorno",
+				"addressRegion": "Los Lagos",
+				"addressCountry": "CL"
+			},
 			"alumniOf": {
-				"@type": "Organization",
-				"name": "Universidad de Los Lagos"
+				"@type": "CollegeOrUniversity",
+				"name": "Universidad de Los Lagos",
+				"sameAs": "https://www.ulagos.cl"
 			},
 			"knowsAbout": [
 				"NestJS",
 				"Next.js",
 				"PostgreSQL",
 				"TypeScript",
+				"JavaScript",
 				"Cloud Computing",
-				"Full Stack Development"
-			]
+				"Google Cloud Platform",
+				"Cloudflare",
+				"Prisma ORM",
+				"Full Stack Development",
+				"Backend Development",
+				"Frontend Development",
+				"Arquitectura de Software",
+				"Desarrollo Web",
+				"Sistemas Escalables"
+			],
+			"hasOccupation": {
+				"@type": "Occupation",
+				"name": "Desarrollador Full Stack",
+				"occupationLocation": {
+					"@type": "Country",
+					"name": "Chile"
+				},
+				"skills": "NestJS, Next.js, PostgreSQL, TypeScript, Cloud Architecture"
+			}
 		}
 		</script>
 	</head>
