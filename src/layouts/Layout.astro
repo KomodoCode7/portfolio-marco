@@ -73,7 +73,7 @@ const { title, description } = Astro.props;
 				"https://github.com/KomodoCode7"
 			],
 			"email": "marcoantonio.molina2001@gmail.com",
-			"telephone": "+56-XXX-XXX-XXX",
+			"telephone": "+56-982-265-474",
 			"address": {
 				"@type": "PostalAddress",
 				"addressLocality": "Osorno",
@@ -115,129 +115,73 @@ const { title, description } = Astro.props;
 		</script>
 	</head>
 	<body>
-		<!-- Cursor personalizado -->
-		<div id="custom-cursor" class="custom-cursor"></div>
-		
 		<!-- Contenedor para el fondo Vanta.js -->
-		<div id="vanta-bg" class="fixed top-0 left-0 w-full h-full -z-5 vanta-container"></div>
+		<div id="vanta-bg" class="fixed top-0 left-0 w-full h-full -z-10"></div>
 		
-		<div class="relative z-10 backdrop-blur-[1px]">
+		<div class="relative z-10">
 			<Header />
 			<slot />
 			<Footer />
 		</div>
 
-		<!-- Script de Vanta.js - Carga diferida para mejor performance -->
+		<!-- Script de Vanta.js -->
 		<script>
-			// Detectar si es dispositivo móvil
-			const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || 
-			                 window.innerWidth < 1024;
+			// @ts-ignore
+			import VANTA from 'vanta/dist/vanta.net.min';
+			// @ts-ignore
+			import * as THREE from 'three';
 
-			let vantaLoaded = false;
-
-			if (!isMobile) {
-				// Desktop: Cargar Vanta solo después de interacción del usuario o scroll
-				const loadVanta = () => {
-					if (vantaLoaded) return;
-					vantaLoaded = true;
-
-					const vantaElement = document.getElementById('vanta-bg');
-					if (!vantaElement) return;
-
-					// Cargar dinámicamente Vanta.js y Three.js
-					Promise.all([
-						// @ts-ignore
-						import('vanta/dist/vanta.net.min'),
-						// @ts-ignore
-						import('three')
-					]).then(([VANTA_MODULE, THREE_MODULE]) => {
-						const VANTA = VANTA_MODULE.default;
-						const THREE = THREE_MODULE;
-						
-						try {
-							// Iniciar Vanta oculto
-							vantaElement.style.opacity = '0';
-							
-							const vantaEffect = VANTA({
-								el: vantaElement,
-								THREE: THREE,
-								mouseControls: true,
-								touchControls: false,
-								gyroControls: false,
-								minHeight: 200.00,
-								minWidth: 200.00,
-								scale: 1.00,
-								scaleMobile: 1.00,
-								color: 0x007291, // Color cyan/violeta
-								backgroundColor: 0x00010D, // Negro oscuro
-								points: 10.00,
-								maxDistance: 18.00,
-								spacing: 16.00,
-								showDots: true
-							});
-
-							// Esperar a que Vanta renderice completamente y luego hacer fade-in
-							setTimeout(() => {
-								// Aplicar estilos al canvas
-								if (vantaEffect && vantaEffect.scene) {
-									// Configurar materiales con el color correcto
-									vantaEffect.scene.traverse((object: any) => {
-										if (object.material && object.material.color) {
-											object.material.color.setHex(0x007291);
-											object.material.opacity = 0.6;
-											object.material.transparent = true;
-										}
-									});
-								}
-
-								// Fade-in suave después de configurar
-								setTimeout(() => {
-									vantaElement.style.transition = 'opacity 1.5s ease-in-out';
-									vantaElement.style.opacity = '1';
-								}, 100);
-							}, 300);
-
-						} catch (error) {
-							console.error('Error al cargar Vanta.js:', error);
-							// En caso de error, mostrar el fondo de todas formas
-							vantaElement.style.opacity = '1';
-						}
-					}).catch(error => {
-						console.error('Error al importar Vanta:', error);
-						// En caso de error, mostrar el fondo
-						if (vantaElement) {
-							vantaElement.style.opacity = '1';
-						}
-					});
-				};
-
-				// Cargar después de 2 segundos o al hacer scroll (lo que ocurra primero)
-				let scrollListener: (() => void) | null = null;
+			document.addEventListener('DOMContentLoaded', () => {
+				const vantaElement = document.getElementById('vanta-bg');
 				
-				const initTimeout = setTimeout(() => {
-					loadVanta();
-					if (scrollListener) {
-						window.removeEventListener('scroll', scrollListener);
+				if (vantaElement) {
+					try {
+						const vantaEffect = VANTA({
+							el: vantaElement,
+							THREE: THREE,
+							mouseControls: true,
+							touchControls: true,
+							gyroControls: false,
+							minHeight: 200.00,
+							minWidth: 200.00,
+							scale: 1.00,
+							scaleMobile: 1.00,
+							color: 0x06b6d4, // Color cyan
+							backgroundColor: 0x00010D,
+							points: 8.00,
+							maxDistance: 20.00,
+							spacing: 15.00,
+							showDots: true
+						});
+
+						// Modificar materiales
+						setTimeout(() => {
+							if (vantaEffect && vantaEffect.scene) {
+								vantaEffect.scene.traverse((object: any) => {
+									if (object.material && object.material.color) {
+										object.material.color.setHex(0x06b6d4);
+										object.material.opacity = 0.6;
+										object.material.transparent = true;
+									}
+								});
+							}
+						}, 100);
+					} catch (error) {
+						console.error('Error al cargar Vanta.js:', error);
 					}
-				}, 2000);
-
-				scrollListener = () => {
-					clearTimeout(initTimeout);
-					loadVanta();
-					if (scrollListener) {
-						window.removeEventListener('scroll', scrollListener);
-					}
-				};
-
-				window.addEventListener('scroll', scrollListener, { once: true, passive: true });
-
-			} else {
-				// Mobile: Usar fondo gradiente CSS (más ligero)
-				const vantaBg = document.getElementById('vanta-bg');
-				if (vantaBg) {
-					vantaBg.classList.add('mobile-gradient');
 				}
-			}
+			});
+		</script>
+
+		<!-- Cursor Effect optimizado -->
+		<script>
+			import { fairyDustCursor } from 'cursor-effects';
+
+			document.addEventListener('DOMContentLoaded', () => {
+				fairyDustCursor({
+					colors: ['#06b6d4', '#22d3ee', '#67e8f9'] // Cyan tonos
+				});
+			});
 		</script>
 	</body>
 </html>
@@ -249,18 +193,12 @@ const { title, description } = Astro.props;
 	html {
 		font-family: 'Montserrat Variable', sans-serif;
 		scroll-behavior: smooth;
-		cursor: none; /* Ocultar cursor por defecto */
-		background-color: #00010D; /* Fondo oscuro mientras carga Vanta */
 	}
 
 	body {
-		background-color: #00010D; /* Mismo color que Vanta backgroundColor */
+		background-color: #00010D;
 		margin: 0;
 		padding: 0;
-	}
-
-	* {
-		cursor: none !important; /* Asegurar que todos los elementos oculten el cursor */
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -268,159 +206,4 @@ const { title, description } = Astro.props;
 			scroll-behavior: auto;
 		}
 	}
-
-	/* Cursor personalizado */
-	.custom-cursor {
-		position: fixed;
-		width: 20px;
-		height: 20px;
-		background: linear-gradient(135deg, #87CEEB, #4FC3F7);
-		border-radius: 50%;
-		pointer-events: none;
-		z-index: 99999;
-		transform: translate(-50%, -50%);
-		transition: width 0.15s ease, height 0.15s ease, opacity 0.15s ease, background 0.15s ease;
-		opacity: 0.9;
-		box-shadow: 0 0 20px rgba(135, 206, 235, 0.8), 0 0 40px rgba(79, 195, 247, 0.4);
-		mix-blend-mode: screen;
-	}
-
-	/* Cursor más grande en hover sobre elementos interactivos */
-	.custom-cursor.hover {
-		width: 35px;
-		height: 35px;
-		opacity: 1;
-		background: linear-gradient(135deg, #4FC3F7, #87CEEB);
-	}
-
-	/* Contenedor de Vanta.js */
-	.vanta-container {
-		background-color: #00010D; /* Color de fondo mientras carga */
-		will-change: opacity; /* Optimización para animación */
-	}
-
-	/* Canvas de Vanta con transición suave */
-	.vanta-container canvas {
-		opacity: inherit;
-		transition: opacity 0.5s ease-in-out;
-	}
-
-	/* Mobile: Fondo gradiente animado con CSS (sin Vanta.js) */
-	.mobile-gradient {
-		background: radial-gradient(ellipse at 50% 30%, #007291 0%, #00010D 60%);
-		opacity: 1 !important;
-		animation: fadeInVanta 0.8s ease-in forwards, pulse 8s ease-in-out infinite;
-		animation-delay: 0.2s, 0.8s;
-	}
-
-	@keyframes fadeInVanta {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-
-	@keyframes pulse {
-		0%, 100% { 
-			opacity: 0.8;
-			transform: scale(1);
-		}
-		50% { 
-			opacity: 1;
-			transform: scale(1.02);
-		}
-	}
-
-	/* Prevenir FOUC (Flash of Unstyled Content) - Ocultar elementos antes de animaciones GSAP */
-	.timeline-dot {
-		opacity: 0;
-		transform: scale(0);
-	}
-
-	.timeline-card {
-		opacity: 0;
-		transform: translateX(-20px);
-	}
-
-	.tech-card {
-		opacity: 0;
-	}
-
-	/* Hero section - ocultar todo hasta que GSAP lo anime */
-	.hero-photo,
-	.hero-badge,
-	.hero-contact a,
-	.hero-title h1,
-	.hero-title h2, 
-	.hero-title p,
-	.hero-title-mobile h1,
-	.hero-title-mobile h2,
-	.hero-title-mobile p,
-	.hero-cards > div,
-	.hero-summary {
-		opacity: 0;
-	}
-
-	/* Ocultar todo el contenedor de métricas para que aparezca todo junto */
-	.hero-metrics > div {
-		opacity: 0;
-	}
-
-	/* Barra púrpura - comenzar sin altura */
-	.hero-title {
-		position: relative;
-	}
-
-	.hero-title::before {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 4px;
-		height: 0;
-		background-color: rgb(168, 85, 247); /* purple-500 */
-		transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-	}
-
-	/* Cuando GSAP active la animación, la barra crecerá */
-	.hero-title.animate-border::before {
-		height: 100%;
-	}
-
-	/* Quitar el border-l original cuando usamos ::before */
-	.hero-title.animate-border {
-		border-left: none !important;
-	}
-
-	/* Los elementos se mostrarán cuando GSAP los anime */
 </style>
-
-<script>
-	// Script para mover el cursor personalizado
-	document.addEventListener('DOMContentLoaded', () => {
-		const cursor = document.getElementById('custom-cursor');
-		
-		if (cursor) {
-			// Seguir el movimiento del mouse
-			document.addEventListener('mousemove', (e) => {
-				cursor.style.left = `${e.clientX}px`;
-				cursor.style.top = `${e.clientY}px`;
-			});
-
-			// Agregar clase hover en elementos interactivos
-			const interactiveElements = document.querySelectorAll('a, button, [role="button"], .tech-card, input, textarea');
-			
-			interactiveElements.forEach(el => {
-				el.addEventListener('mouseenter', () => {
-					cursor.classList.add('hover');
-				});
-				
-				el.addEventListener('mouseleave', () => {
-					cursor.classList.remove('hover');
-				});
-			});
-		}
-	});
-</script>

@@ -15,6 +15,7 @@
     "@fontsource-variable/montserrat": "^5.1.0",
     "@fontsource/poppins": "^5.1.0",
     "astro": "^5.0.0-beta.5",
+    "cursor-effects": "^1.0.17",
     "gsap": "^3.13.0",
     "portfolio-marco": "file:",
     "tailwindcss": "^3.4.14",
