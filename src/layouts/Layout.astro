@@ -2,9 +2,18 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '@fontsource-variable/montserrat/wght.css';
+
 interface Props {
-	title: string;
-	description: string;
+  title: string;
+  description: string;
+}
+
+declare global {
+  interface Window {
+    VANTA?: any;
+    THREE?: any;
+    fairyDustCursor?: (options: { colors: string[] }) => void;
+  }
 }
 
 const { title, description } = Astro.props;
@@ -12,198 +21,220 @@ const { title, description } = Astro.props;
 
 <!doctype html>
 <html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="generator" content={Astro.generator} />
-		
-		<!-- Preconnect para mejorar performance -->
-		<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-		<link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-		
-		<!-- SEO Meta Tags -->
-		<title>{title}</title>
-		<meta name="description" content={description} />
-		<meta name="keywords" content="Marco Molina, Marco Antonio Molina, Ingeniero Civil Informático, Desarrollador Full Stack, NestJS, Next.js, PostgreSQL, TypeScript, Prisma, Cloud Run, Google Cloud, desarrollador Chile, programador Chile, desarrollador Osorno, ingeniero informático Chile, arquitectura cloud, sistemas web, desarrollo backend, desarrollo frontend, portfolio desarrollador" />
-		<meta name="author" content="Marco Antonio Molina" />
-		<meta name="robots" content="index, follow" />
-		<meta name="theme-color" content="#00010D" />
-		<link rel="canonical" href="https://marcomolina.cl" />
-		<meta name="geo.region" content="CL-LL" />
-		<meta name="geo.placename" content="Osorno" />
-		<meta name="geo.position" content="-40.5735;-73.1349" />
-		<meta name="ICBM" content="-40.5735, -73.1349" />
-		
-		<!-- Open Graph / Facebook -->
-		<meta property="og:type" content="website" />
-		<meta property="og:url" content="https://marcomolina.cl/" />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:image" content="https://marcomolina.cl/og-image.jpg" />
-		<meta property="og:image:alt" content="Marco Molina - Ingeniero Civil Informático" />
-		<meta property="og:image:width" content="1200" />
-		<meta property="og:image:height" content="630" />
-		<meta property="og:locale" content="es_CL" />
-		<meta property="og:site_name" content="Marco Molina - Portfolio" />
-		
-		<!-- Twitter -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:url" content="https://marcomolina.cl/" />
-		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={description} />
-		<meta name="twitter:image" content="https://marcomolina.cl/og-image.jpg" />
-		<meta name="twitter:image:alt" content="Marco Molina - Ingeniero Civil Informático" />
-		
-		<!-- Favicon -->
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		
-		<!-- Structured Data (JSON-LD) -->
-		<script type="application/ld+json">
-		{
-			"@context": "https://schema.org",
-			"@type": "Person",
-			"name": "Marco Antonio Molina",
-			"alternateName": "Marco Molina",
-			"jobTitle": "Ingeniero Civil Informático",
-			"description": "Desarrollador Full Stack especializado en NestJS, Next.js, PostgreSQL y tecnologías cloud. Ingeniero Civil Informático con experiencia en arquitectura de sistemas escalables y desarrollo web moderno.",
-			"url": "https://marcomolina.cl",
-			"image": "https://marcomolina.cl/1754233231550.webp",
-			"sameAs": [
-				"https://www.linkedin.com/in/marco-molina-b0199a214/",
-				"https://github.com/KomodoCode7"
-			],
-			"email": "marcoantonio.molina2001@gmail.com",
-			"telephone": "+56-982-265-474",
-			"address": {
-				"@type": "PostalAddress",
-				"addressLocality": "Osorno",
-				"addressRegion": "Los Lagos",
-				"addressCountry": "CL"
-			},
-			"alumniOf": {
-				"@type": "CollegeOrUniversity",
-				"name": "Universidad de Los Lagos",
-				"sameAs": "https://www.ulagos.cl"
-			},
-			"knowsAbout": [
-				"NestJS",
-				"Next.js",
-				"PostgreSQL",
-				"TypeScript",
-				"JavaScript",
-				"Cloud Computing",
-				"Google Cloud Platform",
-				"Cloudflare",
-				"Prisma ORM",
-				"Full Stack Development",
-				"Backend Development",
-				"Frontend Development",
-				"Arquitectura de Software",
-				"Desarrollo Web",
-				"Sistemas Escalables"
-			],
-			"hasOccupation": {
-				"@type": "Occupation",
-				"name": "Desarrollador Full Stack",
-				"occupationLocation": {
-					"@type": "Country",
-					"name": "Chile"
-				},
-				"skills": "NestJS, Next.js, PostgreSQL, TypeScript, Cloud Architecture"
-			}
-		}
-		</script>
-	</head>
-	<body>
-		<!-- Contenedor para el fondo Vanta.js -->
-		<div id="vanta-bg" class="fixed top-0 left-0 w-full h-full -z-10"></div>
-		
-		<div class="relative z-10">
-			<Header />
-			<slot />
-			<Footer />
-		</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Preconnect para mejorar performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Marco Molina, Marco Antonio Molina, Ingeniero Civil Informático, Desarrollador Full Stack, NestJS, Next.js, PostgreSQL, TypeScript, Prisma, Cloud Run, Google Cloud, desarrollador Chile, programador Chile, desarrollador Osorno, ingeniero informático Chile, arquitectura cloud, sistemas web, desarrollo backend, desarrollo frontend, portfolio desarrollador" />
+    <meta name="author" content="Marco Antonio Molina" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#00010D" />
+    <link rel="canonical" href="https://marcomolina.cl" />
+    <meta name="geo.region" content="CL-LL" />
+    <meta name="geo.placename" content="Osorno" />
+    <meta name="geo.position" content="-40.5735;-73.1349" />
+    <meta name="ICBM" content="-40.5735, -73.1349" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://marcomolina.cl/" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://marcomolina.cl/og-image.jpg" />
+    <meta property="og:image:alt" content="Marco Molina - Ingeniero Civil Informático" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="es_CL" />
+    <meta property="og:site_name" content="Marco Molina - Portfolio" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://marcomolina.cl/" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://marcomolina.cl/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Marco Molina - Ingeniero Civil Informático" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" is:inline>
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Marco Antonio Molina",
+      "alternateName": "Marco Molina",
+      "jobTitle": "Ingeniero Civil Informático",
+      "description": "Desarrollador Full Stack especializado en NestJS, Next.js, PostgreSQL y tecnologías cloud. Ingeniero Civil Informático con experiencia en arquitectura de sistemas escalables y desarrollo web moderno.",
+      "url": "https://marcomolina.cl",
+      "image": "https://marcomolina.cl/1754233231550.webp",
+      "sameAs": [
+        "https://www.linkedin.com/in/marco-molina-b0199a214/",
+        "https://github.com/KomodoCode7"
+      ],
+      "email": "marcoantonio.molina2001@gmail.com",
+      "telephone": "+56-982-265-474",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Osorno",
+        "addressRegion": "Los Lagos",
+        "addressCountry": "CL"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "Universidad de Los Lagos",
+        "sameAs": "https://www.ulagos.cl"
+      },
+      "knowsAbout": [
+        "NestJS",
+        "Next.js",
+        "PostgreSQL",
+        "TypeScript",
+        "JavaScript",
+        "Cloud Computing",
+        "Google Cloud Platform",
+        "Cloudflare",
+        "Prisma ORM",
+        "Full Stack Development",
+        "Backend Development",
+        "Frontend Development",
+        "Arquitectura de Software",
+        "Desarrollo Web",
+        "Sistemas Escalables"
+      ],
+      "hasOccupation": {
+        "@type": "Occupation",
+        "name": "Desarrollador Full Stack",
+        "occupationLocation": {
+          "@type": "Country",
+          "name": "Chile"
+        },
+        "skills": "NestJS, Next.js, PostgreSQL, TypeScript, Cloud Architecture"
+      }
+    }
+    </script>
 
-		<!-- Script de Vanta.js -->
-		<script>
-			// @ts-ignore
-			import VANTA from 'vanta/dist/vanta.net.min';
-			// @ts-ignore
-			import * as THREE from 'three';
+    <!-- Dependencias desde CDN (sin is:inline) -->
+    <script src="https://unpkg.com/three@latest/build/three.min.js" defer></script>
+    <script src="https://unpkg.com/vanta@latest/dist/vanta.net.min.js" defer></script>
+    <script src="https://unpkg.com/cursor-effects@latest/dist/browser.js" defer></script>
 
-			document.addEventListener('DOMContentLoaded', () => {
-				const vantaElement = document.getElementById('vanta-bg');
-				
-				if (vantaElement) {
-					try {
-						const vantaEffect = VANTA({
-							el: vantaElement,
-							THREE: THREE,
-							mouseControls: true,
-							touchControls: true,
-							gyroControls: false,
-							minHeight: 200.00,
-							minWidth: 200.00,
-							scale: 1.00,
-							scaleMobile: 1.00,
-							color: 0x06b6d4, // Color cyan
-							backgroundColor: 0x00010D,
-							points: 8.00,
-							maxDistance: 20.00,
-							spacing: 15.00,
-							showDots: true
-						});
+    <!-- Inicialización optimizada de Vanta + cursor -->
+    <script is:inline>
+      window.addEventListener('load', () => {
+        const vantaElement = document.getElementById('vanta-bg');
+        const w = window;
 
-						// Modificar materiales
-						setTimeout(() => {
-							if (vantaEffect && vantaEffect.scene) {
-								vantaEffect.scene.traverse((object: any) => {
-									if (object.material && object.material.color) {
-										object.material.color.setHex(0x06b6d4);
-										object.material.opacity = 0.6;
-										object.material.transparent = true;
-									}
-								});
-							}
-						}, 100);
-					} catch (error) {
-						console.error('Error al cargar Vanta.js:', error);
-					}
-				}
-			});
-		</script>
+        // DEBUG opcional:
+        // console.log('VANTA:', !!w.VANTA, 'THREE:', !!w.THREE, 'el:', !!vantaElement);
 
-		<!-- Cursor Effect optimizado -->
-		<script>
-			import { fairyDustCursor } from 'cursor-effects';
+        if (!vantaElement || !w.VANTA || !w.THREE) {
+          return;
+        }
 
-			document.addEventListener('DOMContentLoaded', () => {
-				fairyDustCursor({
-					colors: ['#06b6d4', '#22d3ee', '#67e8f9'] // Cyan tonos
-				});
-			});
-		</script>
-	</body>
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+        // Si es mobile o el usuario pide menos animaciones → fondo estático
+        if (isMobile || prefersReducedMotion) {
+          vantaElement.style.backgroundColor = '#00010D';
+        } else {
+          try {
+            const vantaEffect = w.VANTA.NET({
+              el: vantaElement,
+              THREE: w.THREE,
+              mouseControls: true,
+              touchControls: false,
+              gyroControls: false,
+              minHeight: 200.0,
+              minWidth: 200.0,
+              scale: 1.0,
+              scaleMobile: 1.0,
+
+              // Parámetros algo más livianos
+              color: 0x06b6d4,
+              backgroundColor: 0x00010D,
+              points: 5.0,
+              maxDistance: 18.0,
+              spacing: 20.0,
+              showDots: false
+            });
+
+            // Ajuste puntual de materiales (una sola pasada)
+            if (vantaEffect && vantaEffect.scene) {
+              vantaEffect.scene.traverse((object) => {
+                if (object.material && object.material.color) {
+                  object.material.color.setHex(0x06b6d4);
+                  if ('opacity' in object.material) {
+                    object.material.opacity = 0.5;
+                    object.material.transparent = true;
+                  }
+                }
+              });
+            }
+
+            // Limpieza al salir de la página
+            window.addEventListener('beforeunload', () => {
+              if (vantaEffect && typeof vantaEffect.destroy === 'function') {
+                vantaEffect.destroy();
+              }
+            });
+          } catch (error) {
+            console.error('Error al inicializar Vanta.js:', error);
+            vantaElement.style.backgroundColor = '#00010D';
+          }
+        }
+
+        // Cursor effect: solo desktop y sin reduced-motion
+        if (!isMobile && !prefersReducedMotion && w.fairyDustCursor) {
+          w.fairyDustCursor({
+            colors: ['#06b6d4', '#22d3ee', '#67e8f9']
+          });
+        }
+      });
+    </script>
+  </head>
+
+  <body>
+    <!-- Contenedor para el fondo Vanta.js -->
+    <!-- Si quieres que solo ocupe el hero, cambia h-full por algo como h-[320px] -->
+    <div id="vanta-bg" class="fixed inset-0 z-20"></div>
+    
+    <div class="relative z-10">
+      <Header />
+      <slot />
+      <Footer />
+    </div>
+  </body>
 </html>
+
 <style is:global>
-	::root {
-		color-scheme: light dark;
-	}
-	
-	html {
-		font-family: 'Montserrat Variable', sans-serif;
-		scroll-behavior: smooth;
-	}
+  :root {
+    color-scheme: light dark;
+  }
+  
+  html {
+    font-family: 'Montserrat Variable', sans-serif;
+    scroll-behavior: smooth;
+  }
 
-	body {
-		background-color: #00010D;
-		margin: 0;
-		padding: 0;
-	}
+  body {
+    background-color: #00010D;
+    margin: 0;
+    padding: 0;
+  }
 
-	@media (prefers-reduced-motion: reduce) {
-		html {
-			scroll-behavior: auto;
-		}
-	}
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
 </style>
