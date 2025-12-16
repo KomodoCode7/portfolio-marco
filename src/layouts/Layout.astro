@@ -10,8 +10,6 @@ interface Props {
 
 declare global {
   interface Window {
-    VANTA?: any;
-    THREE?: any;
     fairyDustCursor?: (options: { colors: string[] }) => void;
   }
 }
@@ -65,8 +63,6 @@ const { title, description } = Astro.props;
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    
-    <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json" is:inline>
     {
       "@context": "https://schema.org",
@@ -123,79 +119,17 @@ const { title, description } = Astro.props;
     }
     </script>
 
-    <!-- Dependencias desde CDN (sin is:inline) -->
-    <script src="https://unpkg.com/three@latest/build/three.min.js" defer></script>
-    <script src="https://unpkg.com/vanta@latest/dist/vanta.net.min.js" defer></script>
+    <!-- Cursor effects desde CDN -->
     <script src="https://unpkg.com/cursor-effects@latest/dist/browser.js" defer></script>
 
-    <!-- Inicialización optimizada de Vanta + cursor -->
+    <!-- Cursor effect: solo desktop y sin reduced-motion -->
     <script is:inline>
       window.addEventListener('load', () => {
-        const vantaElement = document.getElementById('vanta-bg');
-        const w = window;
-
-        // DEBUG opcional:
-        // console.log('VANTA:', !!w.VANTA, 'THREE:', !!w.THREE, 'el:', !!vantaElement);
-
-        if (!vantaElement || !w.VANTA || !w.THREE) {
-          return;
-        }
-
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-        // Si es mobile o el usuario pide menos animaciones → fondo estático
-        if (isMobile || prefersReducedMotion) {
-          vantaElement.style.backgroundColor = '#00010D';
-        } else {
-          try {
-            const vantaEffect = w.VANTA.NET({
-              el: vantaElement,
-              THREE: w.THREE,
-              mouseControls: true,
-              touchControls: false,
-              gyroControls: false,
-              minHeight: 200.0,
-              minWidth: 200.0,
-              scale: 1.0,
-              scaleMobile: 1.0,
-
-              // Parámetros algo más livianos
-              color: 0x06b6d4,
-              backgroundColor: 0x00010D,
-              points: 5.0,
-              maxDistance: 18.0,
-              spacing: 20.0,
-              showDots: false
-            });
-
-            // Ajuste puntual de materiales (una sola pasada)
-            if (vantaEffect && vantaEffect.scene) {
-              vantaEffect.scene.traverse((object) => {
-                if (object.material && object.material.color) {
-                  object.material.color.setHex(0x06b6d4);
-                  if ('opacity' in object.material) {
-                    object.material.opacity = 0.5;
-                    object.material.transparent = true;
-                  }
-                }
-              });
-            }
-
-            // Limpieza al salir de la página
-            window.addEventListener('beforeunload', () => {
-              if (vantaEffect && typeof vantaEffect.destroy === 'function') {
-                vantaEffect.destroy();
-              }
-            });
-          } catch (error) {
-            console.error('Error al inicializar Vanta.js:', error);
-            vantaElement.style.backgroundColor = '#00010D';
-          }
-        }
-
-        // Cursor effect: solo desktop y sin reduced-motion
-        if (!isMobile && !prefersReducedMotion && w.fairyDustCursor) {
-          w.fairyDustCursor({
+        if (!isMobile && !prefersReducedMotion && window.fairyDustCursor) {
+          window.fairyDustCursor({
             colors: ['#06b6d4', '#22d3ee', '#67e8f9']
           });
         }
@@ -204,9 +138,17 @@ const { title, description } = Astro.props;
   </head>
 
   <body>
-    <!-- Contenedor para el fondo Vanta.js -->
-    <!-- Si quieres que solo ocupe el hero, cambia h-full por algo como h-[320px] -->
-    <div id="vanta-bg" class="fixed inset-0 z-20"></div>
+    <!-- Contenedor para el fondo WebGPU/Three.js -->
+    <div id="webgpu-bg" class="fixed inset-0 z-0"></div>
+    
+    <!-- Inicialización del background WebGPU -->
+    <script>
+      import { initBackground } from '../scripts/webgpu-background';
+      
+      document.addEventListener('DOMContentLoaded', () => {
+        initBackground('webgpu-bg');
+      });
+    </script>
     
     <div class="relative z-10">
       <Header />
