@@ -138,10 +138,10 @@ const { title, description } = Astro.props;
   </head>
 
   <body>
-    <!-- Contenedor para el fondo WebGPU/Three.js -->
+    <!-- Contenedor para el fondo WebGPU/Three.js con TSL -->
     <div id="webgpu-bg" class="fixed inset-0 z-0"></div>
     
-    <!-- Inicialización del background WebGPU -->
+    <!-- Inicialización del background WebGPU (con fallback a WebGL) -->
     <script>
       import { initBackground } from '../scripts/webgpu-background';
       

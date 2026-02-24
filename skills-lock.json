@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "webgpu-threejs-tsl": {
+      "source": "dgreenheck/webgpu-claude-skill",
+      "sourceType": "github",
+      "computedHash": "85bac81bcd8522eaeaeda910addddb0b47bab0521e51b2d17906a9ea81fc7e54"
+    }
+  }
+}
