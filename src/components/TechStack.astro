@@ -218,14 +218,31 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-document.addEventListener('DOMContentLoaded', () => {
+// Storage for cleanup
+const scrollTriggers: ScrollTrigger[] = [];
+const eventHandlers: Array<{ el: Element; event: string; fn: EventListener }> = [];
+
+// Check reduced motion preference
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Initialize animations (DOM is already ready in Astro)
+(() => {
     const techSections = document.querySelectorAll('.tech-section');
 
     techSections.forEach((section) => {
         const cards = section.querySelectorAll('.tech-card');
 
+        if (prefersReducedMotion) {
+            // Set final states immediately without animation
+            gsap.set(cards, { opacity: 1, y: 0, scale: 1 });
+            return;
+        }
+
+        // Set will-change for better performance
+        gsap.set(cards, { willChange: 'transform, opacity' });
+
         // Animación de entrada con scroll
-        gsap.fromTo(cards,
+        const entranceTween = gsap.fromTo(cards,
             {
                 opacity: 0,
                 y: 30,
@@ -241,10 +258,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 scrollTrigger: {
                     trigger: section,
                     start: 'top 80%',
-                    toggleActions: 'play none none reverse',
+                    toggleActions: 'play none none reverse'
+                },
+                onComplete: () => {
+                    // Remove will-change after first animation
+                    gsap.set(cards, { willChange: 'auto' });
                 }
             }
         );
+
+        if (entranceTween.scrollTrigger) {
+            scrollTriggers.push(entranceTween.scrollTrigger);
+        }
 
         // Hover effects en cada card
         cards.forEach((card, cardIndex) => {
@@ -253,11 +278,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const expandedView = card.querySelector('.tech-expanded-view');
             const icon = card.querySelector('.tech-icon');
             
+            if (!cardInner || !compactView || !expandedView || !icon) return;
+
             let isExpanded = false;
 
-            card.addEventListener('mouseenter', () => {
+            const handleMouseEnter = () => {
                 if (isExpanded) return;
                 isExpanded = true;
+
+                // Set will-change before complex animation
+                gsap.set([cardInner, icon, compactView, expandedView], {
+                    willChange: 'transform, opacity, width'
+                });
 
                 // Cancelar todas las animaciones previas
                 gsap.killTweensOf([cardInner, icon, compactView, expandedView]);
@@ -337,9 +369,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                     }
                 });
-            });
+            };
 
-            card.addEventListener('mouseleave', () => {
+            const handleMouseLeave = () => {
                 if (!isExpanded) return;
                 isExpanded = false;
 
@@ -367,13 +399,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 // Contraer la card
-                gsap.to(cardInner, {
+                const contractTween = gsap.to(cardInner, {
                     width: 'auto',
                     borderColor: 'rgba(255, 255, 255, 0.1)',
                     boxShadow: '0 0 0 rgba(168, 85, 247, 0)',
                     duration: 0.3,
                     ease: 'power2.in',
                     zIndex: 1
+                });
+
+                // Remove will-change after animation completes
+                contractTween.then(() => {
+                    gsap.set([cardInner, icon, compactView, expandedView], {
+                        willChange: 'auto'
+                    });
                 });
 
                 // Resetear rotación del icono
@@ -395,9 +434,40 @@ document.addEventListener('DOMContentLoaded', () => {
                         ease: 'power2.out'
                     });
                 });
-            });
+            };
+
+            card.addEventListener('mouseenter', handleMouseEnter);
+            card.addEventListener('mouseleave', handleMouseLeave);
+            
+            eventHandlers.push(
+                { el: card, event: 'mouseenter', fn: handleMouseEnter },
+                { el: card, event: 'mouseleave', fn: handleMouseLeave }
+            );
         });
     });
+})();
+
+// Cleanup on page unload/navigation
+window.addEventListener('beforeunload', () => {
+    // Kill all ScrollTriggers
+    scrollTriggers.forEach(trigger => trigger.kill());
+    
+    // Remove all event listeners
+    eventHandlers.forEach(({ el, event, fn }) => {
+        el.removeEventListener(event, fn);
+    });
+    
+    // Kill all animations
+    gsap.killTweensOf('*');
+});
+
+// Cleanup for Astro View Transitions (if enabled)
+document.addEventListener('astro:before-swap', () => {
+    scrollTriggers.forEach(trigger => trigger.kill());
+    eventHandlers.forEach(({ el, event, fn }) => {
+        el.removeEventListener(event, fn);
+    });
+    gsap.killTweensOf('*');
 });
 </script>
 

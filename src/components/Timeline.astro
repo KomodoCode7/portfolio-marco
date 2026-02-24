@@ -121,37 +121,84 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Esperar a que el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
+// Storage for cleanup
+const scrollTriggers: ScrollTrigger[] = [];
+const eventHandlers: Array<{ el: Element; event: string; fn: EventListener }> = [];
+const animations: gsap.core.Tween[] = [];
+
+// Check reduced motion preference
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Initialize animations (DOM is already ready in Astro)
+(() => {
+    const timelineContainer = document.querySelector('.timeline-container');
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    const pulseBadge = document.querySelector('.pulse-badge');
+
+    if (!timelineContainer || !timelineItems.length) return;
+
+    // Set will-change for performance
+    gsap.set(['.timeline-line', '.timeline-dot', '.timeline-card'], {
+        willChange: 'transform, opacity'
+    });
+
+    if (prefersReducedMotion) {
+        // Set final states immediately without animation
+        gsap.set('.timeline-line', { strokeDashoffset: 0 });
+        gsap.set('.timeline-dot', { scale: 1, opacity: 1 });
+        gsap.set('.timeline-card', { x: 0, opacity: 1 });
+        
+        // Remove will-change
+        gsap.set(['.timeline-line', '.timeline-dot', '.timeline-card'], {
+            willChange: 'auto'
+        });
+        return;
+    }
+
     // Animación de la línea principal del timeline
-    gsap.to('.timeline-line', {
+    const lineAnimation = gsap.to('.timeline-line', {
         strokeDashoffset: 0,
         ease: 'none',
         scrollTrigger: {
-            trigger: '.timeline-container',
+            trigger: timelineContainer,
             start: 'top center',
             end: 'bottom center',
             scrub: 1,
+            onLeave: () => {
+                // Remove will-change when animation completes
+                gsap.set('.timeline-line', { willChange: 'auto' });
+            }
         }
     });
+    
+    if (lineAnimation.scrollTrigger) {
+        scrollTriggers.push(lineAnimation.scrollTrigger);
+    }
 
     // Animar cada item del timeline
-    const timelineItems = document.querySelectorAll('.timeline-item');
-    
     timelineItems.forEach((item) => {
         const dot = item.querySelector('.timeline-dot');
         const card = item.querySelector('.timeline-card');
         
+        if (!dot || !card) return;
+
         // Crear timeline de GSAP para cada item con ScrollTrigger
         const tl = gsap.timeline({
             scrollTrigger: {
                 trigger: item,
                 start: 'top 80%',
                 end: 'top 20%',
-                toggleActions: 'play none none reverse',
-                // markers: true, // Descomenta para debug
+                toggleActions: 'play none none reverse'
+            },
+            onComplete: () => {
+                // Remove will-change after first animation
+                gsap.set([dot, card], { willChange: 'auto' });
             }
         });
+
+        if (tl.scrollTrigger) {
+            scrollTriggers.push(tl.scrollTrigger);
+        }
 
         // Animación del punto
         tl.to(dot, {
@@ -170,7 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, '-=0.2'); // Overlap con la animación anterior
 
         // Hover effect en las cards
-        item.addEventListener('mouseenter', () => {
+        const handleMouseEnter = () => {
+            gsap.killTweensOf([card, dot]);
             gsap.to(card, {
                 y: -5,
                 duration: 0.3,
@@ -182,9 +230,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 duration: 0.3,
                 ease: 'elastic.out(1, 0.3)',
             });
-        });
+        };
 
-        item.addEventListener('mouseleave', () => {
+        const handleMouseLeave = () => {
+            gsap.killTweensOf([card, dot]);
             gsap.to(card, {
                 y: 0,
                 duration: 0.3,
@@ -196,20 +245,53 @@ document.addEventListener('DOMContentLoaded', () => {
                 duration: 0.3,
                 ease: 'elastic.out(1, 0.3)',
             });
-        });
+        };
+
+        item.addEventListener('mouseenter', handleMouseEnter);
+        item.addEventListener('mouseleave', handleMouseLeave);
+        
+        eventHandlers.push(
+            { el: item, event: 'mouseenter', fn: handleMouseEnter },
+            { el: item, event: 'mouseleave', fn: handleMouseLeave }
+        );
     });
 
-    // Animación del badge "Actual"
-    const pulseBadge = document.querySelector('.pulse-badge');
+    // Animación del badge "Actual" (usando solo GSAP, no CSS)
     if (pulseBadge) {
-        gsap.to(pulseBadge, {
+        const badgeAnimation = gsap.to(pulseBadge, {
             scale: 1.05,
             duration: 1,
             repeat: -1,
             yoyo: true,
             ease: 'power1.inOut',
         });
+        animations.push(badgeAnimation);
     }
+})();
+
+// Cleanup on page unload/navigation
+window.addEventListener('beforeunload', () => {
+    // Kill all ScrollTriggers
+    scrollTriggers.forEach(trigger => trigger.kill());
+    
+    // Remove all event listeners
+    eventHandlers.forEach(({ el, event, fn }) => {
+        el.removeEventListener(event, fn);
+    });
+    
+    // Kill all animations
+    animations.forEach(anim => anim.kill());
+    gsap.killTweensOf('*');
+});
+
+// Cleanup for Astro View Transitions (if enabled)
+document.addEventListener('astro:before-swap', () => {
+    scrollTriggers.forEach(trigger => trigger.kill());
+    eventHandlers.forEach(({ el, event, fn }) => {
+        el.removeEventListener(event, fn);
+    });
+    animations.forEach(anim => anim.kill());
+    gsap.killTweensOf('*');
 });
 </script>
 
@@ -232,19 +314,5 @@ document.addEventListener('DOMContentLoaded', () => {
         transform-origin: left center;
         opacity: 0;
         transform: translateX(-30px);
-    }
-
-    /* Mejora visual para el badge actual */
-    .pulse-badge {
-        animation: subtle-pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes subtle-pulse {
-        0%, 100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.7;
-        }
     }
 </style>

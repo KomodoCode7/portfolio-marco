@@ -1,6 +1,11 @@
 {
   "version": 1,
   "skills": {
+    "gsap": {
+      "source": "martinholovsky/claude-skills-generator",
+      "sourceType": "github",
+      "computedHash": "87a522a7a848de24c4ceafa591411d59636178f6b50cfc7f892688d8d0204660"
+    },
     "webgpu-threejs-tsl": {
       "source": "dgreenheck/webgpu-claude-skill",
       "sourceType": "github",
