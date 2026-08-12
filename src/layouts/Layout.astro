@@ -141,13 +141,21 @@ const { title, description } = Astro.props;
     <!-- Contenedor para el fondo WebGPU/Three.js con TSL -->
     <div id="webgpu-bg" class="fixed inset-0 z-0"></div>
     
-    <!-- Inicialización del background WebGPU (con fallback a WebGL) -->
+    <!-- Carga diferida: quienes prefieren movimiento reducido no descargan Three.js -->
     <script>
-      import { initBackground } from '../scripts/webgpu-background';
-      
-      document.addEventListener('DOMContentLoaded', () => {
+      const loadBackground = async () => {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduceMotion) return;
+
+        const { initBackground } = await import('../scripts/webgpu-background');
         initBackground('webgpu-bg');
-      });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadBackground, { once: true });
+      } else {
+        void loadBackground();
+      }
     </script>
     
     <div class="relative z-10">
@@ -166,12 +174,14 @@ const { title, description } = Astro.props;
   html {
     font-family: 'Montserrat Variable', sans-serif;
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
     background-color: #00010D;
     margin: 0;
     padding: 0;
+    overflow-x: clip;
   }
 
   @media (prefers-reduced-motion: reduce) {

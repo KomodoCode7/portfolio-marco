@@ -47,7 +47,7 @@ const TIMELINE_EVENTS = [
 
 <div class="relative timeline-container">
     <!-- Línea vertical animada -->
-    <svg class="absolute left-8 top-0 h-full w-0.5 timeline-line-svg" style="overflow: visible;">
+    <svg class="absolute left-8 top-0 h-full w-0.5 timeline-line-svg" aria-hidden="true">
         <defs>
             <linearGradient id="timeline-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" style="stop-color:#22d3ee;stop-opacity:1" />
@@ -124,7 +124,7 @@ gsap.registerPlugin(ScrollTrigger);
 // Storage for cleanup
 const scrollTriggers: ScrollTrigger[] = [];
 const eventHandlers: Array<{ el: Element; event: string; fn: EventListener }> = [];
-const animations: gsap.core.Tween[] = [];
+const animations: gsap.core.Animation[] = [];
 
 // Check reduced motion preference
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -170,6 +170,7 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
             }
         }
     });
+    animations.push(lineAnimation);
     
     if (lineAnimation.scrollTrigger) {
         scrollTriggers.push(lineAnimation.scrollTrigger);
@@ -195,6 +196,7 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
                 gsap.set([dot, card], { willChange: 'auto' });
             }
         });
+        animations.push(tl);
 
         if (tl.scrollTrigger) {
             scrollTriggers.push(tl.scrollTrigger);
@@ -281,7 +283,10 @@ window.addEventListener('beforeunload', () => {
     
     // Kill all animations
     animations.forEach(anim => anim.kill());
-    gsap.killTweensOf('*');
+    const timelineRoot = document.querySelector('.timeline-container');
+    if (timelineRoot) {
+        gsap.killTweensOf(timelineRoot.querySelectorAll('*'));
+    }
 });
 
 // Cleanup for Astro View Transitions (if enabled)
@@ -291,17 +296,22 @@ document.addEventListener('astro:before-swap', () => {
         el.removeEventListener(event, fn);
     });
     animations.forEach(anim => anim.kill());
-    gsap.killTweensOf('*');
+    const timelineRoot = document.querySelector('.timeline-container');
+    if (timelineRoot) {
+        gsap.killTweensOf(timelineRoot.querySelectorAll('*'));
+    }
 });
 </script>
 
 <style>
     .timeline-container {
         position: relative;
+        overflow-x: clip;
     }
 
     .timeline-line-svg {
         pointer-events: none;
+        overflow: hidden;
     }
 
     /* Estado inicial oculto con CSS para evitar FOUC */

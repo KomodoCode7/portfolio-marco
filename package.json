@@ -16,10 +16,10 @@
     "@fontsource/poppins": "^5.1.0",
     "astro": "^5.16.6",
     "cursor-effects": "^1.0.17",
-    "gsap": "^3.13.0",
+    "gsap": "^3.15.0",
     "portfolio-marco": "file:",
     "tailwindcss": "^3.4.14",
-    "three": "^0.180.0",
+    "three": "^0.185.1",
     "typescript": "^5.6.3"
   },
   "devDependencies": {

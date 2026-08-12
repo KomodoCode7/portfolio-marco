@@ -264,6 +264,26 @@ description="Ingeniero Civil Informático titulado (2025) con experiencia desde 
 				import { gsap } from 'gsap';
 
 				document.addEventListener('DOMContentLoaded', () => {
+					const heroRoot = document.querySelector('#top');
+					if (!heroRoot) return;
+
+					const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+					const metrics = heroRoot.querySelectorAll<HTMLElement>('.metric-value');
+
+					if (prefersReducedMotion) {
+						gsap.set(heroRoot.querySelectorAll('.hero-photo, .hero-badge, .hero-contact a, .hero-title h1, .hero-title h2, .hero-title p, .hero-title-mobile h1, .hero-title-mobile h2, .hero-title-mobile p, .hero-cards > div, .hero-summary, .hero-metrics > div'), {
+							opacity: 1,
+							x: 0,
+							y: 0,
+							scale: 1
+						});
+						metrics.forEach((metric) => {
+							metric.textContent = `${metric.dataset.target ?? '0'}+`;
+						});
+						return;
+					}
+
+					const cleanupFns: Array<() => void> = [];
 					// Timeline maestra para coordinar todas las animaciones
 					const masterTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
@@ -362,7 +382,6 @@ description="Ingeniero Civil Informático titulado (2025) con experiencia desde 
 
 					// 7. Métricas con animación de contador
 					const metricsContainers = document.querySelectorAll('.hero-metrics > div');
-					const metrics = document.querySelectorAll('.metric-value');
 					
 					gsap.set(metricsContainers, { opacity: 0, y: 20 });
 					
@@ -393,46 +412,69 @@ description="Ingeniero Civil Informático titulado (2025) con experiencia desde 
 					}, '-=1.5');
 
 					// Hover effects para las cards
-					const cards = document.querySelectorAll('.hero-cards > div');
+					const cards = heroRoot.querySelectorAll('.hero-cards > div');
 					cards.forEach(card => {
-						card.addEventListener('mouseenter', () => {
+						const handleMouseEnter = () => {
 							gsap.to(card, {
 								y: -5,
 								scale: 1.02,
 								duration: 0.3,
 								ease: 'power2.out',
 							});
-						});
+						};
 						
-						card.addEventListener('mouseleave', () => {
+						const handleMouseLeave = () => {
 							gsap.to(card, {
 								y: 0,
 								scale: 1,
 								duration: 0.3,
 								ease: 'power2.out',
 							});
+						};
+
+						card.addEventListener('mouseenter', handleMouseEnter);
+						card.addEventListener('mouseleave', handleMouseLeave);
+						cleanupFns.push(() => {
+							card.removeEventListener('mouseenter', handleMouseEnter);
+							card.removeEventListener('mouseleave', handleMouseLeave);
 						});
 					});
 
 					// Efecto hover en la foto
-					const photo = document.querySelector('.hero-photo');
+					const photo = heroRoot.querySelector('.hero-photo');
 					if (photo) {
-						photo.addEventListener('mouseenter', () => {
+						const handlePhotoEnter = () => {
 							gsap.to(photo, {
 								scale: 1.05,
 								duration: 0.4,
 								ease: 'power2.out',
 							});
-						});
+						};
 						
-						photo.addEventListener('mouseleave', () => {
+						const handlePhotoLeave = () => {
 							gsap.to(photo, {
 								scale: 1,
 								duration: 0.4,
 								ease: 'power2.out',
 							});
+						};
+
+						photo.addEventListener('mouseenter', handlePhotoEnter);
+						photo.addEventListener('mouseleave', handlePhotoLeave);
+						cleanupFns.push(() => {
+							photo.removeEventListener('mouseenter', handlePhotoEnter);
+							photo.removeEventListener('mouseleave', handlePhotoLeave);
 						});
 					}
+
+					const cleanup = () => {
+						cleanupFns.forEach(fn => fn());
+						masterTl.kill();
+						gsap.killTweensOf(heroRoot.querySelectorAll('*'));
+					};
+
+					window.addEventListener('pagehide', cleanup, { once: true });
+					document.addEventListener('astro:before-swap', cleanup, { once: true });
 				});
 			</script>
 

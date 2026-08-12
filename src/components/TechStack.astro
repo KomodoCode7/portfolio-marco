@@ -215,8 +215,9 @@ const TECH_STACK = [
 <script>
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Flip } from 'gsap/Flip';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Flip);
 
 // Storage for cleanup
 const scrollTriggers: ScrollTrigger[] = [];
@@ -288,15 +289,23 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 
                 // Set will-change before complex animation
                 gsap.set([cardInner, icon, compactView, expandedView], {
-                    willChange: 'transform, opacity, width'
+                    willChange: 'transform, opacity'
                 });
 
                 // Cancelar todas las animaciones previas
                 gsap.killTweensOf([cardInner, icon, compactView, expandedView]);
                 
                 // Expandir la card (solo horizontalmente)
+                const expandState = Flip.getState(cardInner);
+                card.classList.add('is-expanded');
+                Flip.from(expandState, {
+                    targets: cardInner,
+                    absolute: true,
+                    simple: true,
+                    duration: 0.4,
+                    ease: 'power3.out'
+                });
                 gsap.to(cardInner, {
-                    width: '280px',
                     borderColor: 'rgba(168, 85, 247, 0.5)',
                     boxShadow: '0 20px 60px rgba(168, 85, 247, 0.3)',
                     duration: 0.4,
@@ -399,8 +408,16 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
                 });
 
                 // Contraer la card
+                const contractState = Flip.getState(cardInner);
+                card.classList.remove('is-expanded');
+                Flip.from(contractState, {
+                    targets: cardInner,
+                    absolute: true,
+                    simple: true,
+                    duration: 0.3,
+                    ease: 'power2.in'
+                });
                 const contractTween = gsap.to(cardInner, {
-                    width: 'auto',
                     borderColor: 'rgba(255, 255, 255, 0.1)',
                     boxShadow: '0 0 0 rgba(168, 85, 247, 0)',
                     duration: 0.3,
@@ -458,7 +475,9 @@ window.addEventListener('beforeunload', () => {
     });
     
     // Kill all animations
-    gsap.killTweensOf('*');
+    document.querySelectorAll('.tech-section').forEach(section => {
+        gsap.killTweensOf(section.querySelectorAll('*'));
+    });
 });
 
 // Cleanup for Astro View Transitions (if enabled)
@@ -467,21 +486,25 @@ document.addEventListener('astro:before-swap', () => {
     eventHandlers.forEach(({ el, event, fn }) => {
         el.removeEventListener(event, fn);
     });
-    gsap.killTweensOf('*');
+    document.querySelectorAll('.tech-section').forEach(section => {
+        gsap.killTweensOf(section.querySelectorAll('*'));
+    });
 });
 </script>
 
 <style>
     .tech-card-inner {
-        will-change: transform, width, height;
+        width: 120px;
         transform-origin: center center;
-        transition: all 0.3s ease;
         position: relative;
+    }
+
+    .tech-card.is-expanded .tech-card-inner {
+        width: 280px;
     }
 
     .tech-card {
         width: 120px;
-        transition: all 0.3s ease;
     }
 
     .tech-expanded-view {

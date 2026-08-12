@@ -7,21 +7,10 @@
 import * as THREE from 'three/webgpu';
 import {
   attribute,
-  vec2,
-  vec3,
-  vec4,
   float,
   uniform,
   positionView,
-  clamp,
-  length,
-  smoothstep,
-  exp,
-  sub,
-  mul,
-  add,
-  negate,
-  div
+  clamp
 } from 'three/tsl';
 
 export interface BackgroundOptions {
@@ -47,11 +36,11 @@ export class WebGPUBackground {
   private stars: Star[] = [];
   private starsMesh!: THREE.Points;
   private container: HTMLElement;
-  private animationId: number | null = null;
   private mouse: THREE.Vector2 = new THREE.Vector2(0, 0);
   private targetMouse: THREE.Vector2 = new THREE.Vector2(0, 0);
   private isWebGPU: boolean = false;
-  private clock: THREE.Clock;
+  private timer: THREE.Timer;
+  private destroyed = false;
 
   // Config
   private starCount: number;
@@ -67,7 +56,8 @@ export class WebGPUBackground {
     this.speed = options.speed ?? 1;
     this.starColor = options.starColor ?? 0x06b6d4;
     this.mouseInfluence = options.mouseInfluence ?? true;
-    this.clock = new THREE.Clock();
+    this.timer = new THREE.Timer();
+    this.timer.connect(document);
     this.pixelRatioUniform = uniform(Math.min(window.devicePixelRatio, 2));
 
     this.scene = new THREE.Scene();
@@ -75,7 +65,7 @@ export class WebGPUBackground {
     
     this.camera = new THREE.PerspectiveCamera(
       75,
-      window.innerWidth / window.innerHeight,
+      this.container.clientWidth / this.container.clientHeight,
       0.1,
       this.depth
     );
@@ -85,39 +75,37 @@ export class WebGPUBackground {
   }
 
   private async init() {
-    // Try WebGPU first
     try {
-      if ('gpu' in navigator) {
-        this.renderer = new THREE.WebGPURenderer({
-          antialias: true,
-          forceWebGL: false,
-        });
-        
-        await this.renderer.init();
-        
-        this.isWebGPU = true;
-        console.log('✅ WebGPU renderer initialized successfully');
-      } else {
-        throw new Error('WebGPU not supported');
-      }
-    } catch (e) {
-      // Fallback to WebGL
-      console.log('⚠️ WebGPU not available, falling back to WebGL');
       this.renderer = new THREE.WebGPURenderer({
         antialias: true,
-        forceWebGL: true,
       });
+
+      this.renderer.onDeviceLost = () => {
+        this.container.style.backgroundColor = '#00010D';
+        this.destroy();
+      };
+
       await this.renderer.init();
-      this.isWebGPU = false;
+      this.isWebGPU = 'isWebGPUBackend' in this.renderer.backend;
+    } catch (error) {
+      console.warn('No fue posible inicializar el fondo acelerado.', error);
+      this.container.style.backgroundColor = '#00010D';
+      this.timer.dispose();
+      return;
     }
 
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    if (this.destroyed) {
+      this.renderer.dispose();
+      return;
+    }
+
+    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.container.appendChild(this.renderer.domElement);
 
     this.createStarfield();
     this.setupEventListeners();
-    this.animate();
+    this.renderer.setAnimationLoop(this.animate);
   }
 
   private createStarfield() {
@@ -201,16 +189,6 @@ export class WebGPUBackground {
     // Set color from attribute
     material.colorNode = colorAttr;
 
-    // Custom fragment for circular points with glow
-    // In PointsNodeMaterial, we need to create the circular effect
-    // pointUV gives us the coordinate within the point (0-1)
-    const pointUV = vec2(
-      // Built-in gl_PointCoord equivalent is not directly available in TSL
-      // We'll use a simpler approach with screen space
-    );
-    
-    // Note: For points, Three.js handles the circular shape automatically
-    // but we can enhance with custom opacity for glow effect
     material.opacityNode = float(0.9);
 
     this.starsMesh = new THREE.Points(geometry, material);
@@ -219,7 +197,7 @@ export class WebGPUBackground {
 
   private updateStars() {
     const positions = this.starsMesh.geometry.attributes.position.array as Float32Array;
-    const deltaTime = this.clock.getDelta();
+    const deltaTime = this.timer.getDelta();
     const speedMultiplier = this.speed * 60 * deltaTime;
 
     // Mouse influence on speed (subtle boost when moving)
@@ -262,8 +240,10 @@ export class WebGPUBackground {
     this.starsMesh.geometry.attributes.position.needsUpdate = true;
   }
 
-  private animate = () => {
-    this.animationId = requestAnimationFrame(this.animate);
+  private animate = (timestamp?: number) => {
+    if (this.destroyed) return;
+
+    this.timer.update(timestamp);
 
     // Smooth mouse lerping
     this.mouse.lerp(this.targetMouse, 0.05);
@@ -286,8 +266,8 @@ export class WebGPUBackground {
   }
 
   private onResize = () => {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    const width = this.container.clientWidth;
+    const height = this.container.clientHeight;
 
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
@@ -298,31 +278,33 @@ export class WebGPUBackground {
   };
 
   private onMouseMove = (event: MouseEvent) => {
-    this.targetMouse.x = event.clientX / window.innerWidth;
-    this.targetMouse.y = 1.0 - event.clientY / window.innerHeight;
+    this.targetMouse.x = event.clientX / this.container.clientWidth;
+    this.targetMouse.y = 1.0 - event.clientY / this.container.clientHeight;
   };
 
   private onTouchMove = (event: TouchEvent) => {
     if (event.touches.length > 0) {
-      this.targetMouse.x = event.touches[0].clientX / window.innerWidth;
-      this.targetMouse.y = 1.0 - event.touches[0].clientY / window.innerHeight;
+      this.targetMouse.x = event.touches[0].clientX / this.container.clientWidth;
+      this.targetMouse.y = 1.0 - event.touches[0].clientY / this.container.clientHeight;
     }
   };
 
   public destroy() {
-    if (this.animationId) {
-      cancelAnimationFrame(this.animationId);
-    }
+    if (this.destroyed) return;
+    this.destroyed = true;
+
+    this.renderer?.setAnimationLoop(null);
 
     window.removeEventListener('resize', this.onResize);
     window.removeEventListener('mousemove', this.onMouseMove);
     window.removeEventListener('touchmove', this.onTouchMove);
 
-    this.starsMesh.geometry.dispose();
-    (this.starsMesh.material as THREE.Material).dispose();
-    this.renderer.dispose();
+    this.timer.dispose();
+    this.starsMesh?.geometry.dispose();
+    (this.starsMesh?.material as THREE.Material | undefined)?.dispose();
+    this.renderer?.dispose();
 
-    if (this.container.contains(this.renderer.domElement)) {
+    if (this.renderer && this.container.contains(this.renderer.domElement)) {
       this.container.removeChild(this.renderer.domElement);
     }
   }
@@ -366,8 +348,8 @@ export function initBackground(containerId: string = 'webgpu-bg') {
     mouseInfluence: true,
   });
 
-  // Cleanup on page unload
-  window.addEventListener('beforeunload', () => bg.destroy());
+  window.addEventListener('pagehide', () => bg.destroy(), { once: true });
+  document.addEventListener('astro:before-swap', () => bg.destroy(), { once: true });
 
   return bg;
 }
