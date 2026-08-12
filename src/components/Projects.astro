@@ -39,11 +39,31 @@ const TAGS = {
 }
 const PROJECTS = [
     {
-        title: "Koralis & Remoras - Sistema Marítimo-Logístico",
+        title: "Millions - E-commerce de joyería personalizada",
+        description: `Storefront full-stack para vender joyas personalizadas con fotografías. Incluye catálogo, simulador visual, carrito para clientes e invitados, autenticación con Google, checkout con Webpay Plus, gestión de pedidos y stock, correos transaccionales, almacenamiento privado de imágenes y un panel administrativo para la operación y revisión de diseños.`,
+        images: [
+            {
+                src: "/millions-home.webp",
+                alt: "Página principal de Millions con un medallón personalizado"
+            },
+            {
+                src: "/millions-collection.webp",
+                alt: "Catálogo de modelos de joyas personalizadas de Millions"
+            },
+            {
+                src: "/millions-customizer.webp",
+                alt: "Personalizador de fotografías para medallones de Millions"
+            }
+        ],
+        tags: [TAGS.NEXT, TAGS.TAILWIND, TAGS.TYPESCRIPT, TAGS.PRISMA],
+        featured: true
+    },
+    {
+        title: "Plataforma de Gestión Marítimo-Logística",
         description: `Plataforma integral para gestión de cotizaciones, registro operativo, cierres mensuales e integración con Softland. 
         Sistema en construcción con arquitectura cloud escalable: NestJS, Next.js, PostgreSQL/Neon, Cloud Run, Cloudflare R2, MS Entra ID.
         Enfocado en optimización de procesos marítimos y reducción de trabajo manual.`,
-        image: "/koralis-preview.webp",
+        image: "/plataforma-maritimo-logistica.webp",
         tags: [TAGS.NEXT, TAGS.TYPESCRIPT, TAGS.PRISMA],
         featured: true
     },
@@ -83,7 +103,7 @@ const PROJECTS = [
 ---
 
 {
-    PROJECTS.map(({ title, description, link, image, tags, featured }) => (
+    PROJECTS.map(({ title, description, link, image, images, tags, featured }) => (
         <div class="mb-10">
             <article class={featured ? "rounded-xl border-2 border-yellow-400/30 bg-yellow-400/5 p-6" : "p-4"}>
                 {featured && (
@@ -95,7 +115,7 @@ const PROJECTS = [
                 )}
                 
                 <!-- Layout Grid para desktop, stack para mobile -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+                <div class={`grid grid-cols-1 gap-6 items-start ${images ? "lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]" : "lg:grid-cols-2"}`}>
                     <!-- Contenido del proyecto -->
                     <div class="order-2 lg:order-1">
                         <h3 class="text-2xl font-semibold text-yellow-400/80 mb-3">{title}</h3>
@@ -123,7 +143,23 @@ const PROJECTS = [
                     </div>
                     
                     <!-- Imagen del proyecto -->
-                    {image && (
+                    {images ? (
+                        <div class="order-1 lg:order-2 grid grid-cols-2 gap-2" aria-label={`Galería de ${title}`}>
+                            {images.map((projectImage, index) => (
+                                <figure class={index === 0 ? "col-span-2" : "col-span-1"}>
+                                    <img
+                                        src={projectImage.src}
+                                        alt={projectImage.alt}
+                                        class={`rounded-lg border border-white/10 shadow-2xl shadow-white/10 w-full object-cover transition-transform duration-300 hover:scale-[1.02] ${index === 0 ? "aspect-[2.1/1]" : "aspect-[2.05/1]"}`}
+                                        width="1600"
+                                        height="762"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </figure>
+                            ))}
+                        </div>
+                    ) : image && (
                         <div class="order-1 lg:order-2">
                             <img 
                                 src={image} 
