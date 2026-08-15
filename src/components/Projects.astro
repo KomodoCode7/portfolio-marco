@@ -102,10 +102,58 @@ const PROJECTS = [
 ]
 ---
 
-{
-    PROJECTS.map(({ title, description, link, image, images, tags, featured }) => (
-        <div class="mb-10">
-            <article class={featured ? "rounded-xl border-2 border-yellow-400/30 bg-yellow-400/5 p-6" : "p-4"}>
+<section
+    class="project-carousel"
+    data-project-carousel
+    aria-label="Proyectos seleccionados"
+    aria-roledescription="carrusel"
+>
+    <div class="mb-5 flex items-center justify-between gap-4">
+        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-white/50" aria-live="polite">
+            Proyecto <span class="text-yellow-400" data-carousel-current>01</span>
+            <span aria-hidden="true">/</span>
+            <span>{String(PROJECTS.length).padStart(2, '0')}</span>
+        </p>
+
+        <div class="flex gap-2">
+            <button
+                type="button"
+                class="inline-flex size-11 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition hover:border-purple-400 hover:bg-purple-500/15 hover:text-purple-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 motion-reduce:transition-none"
+                data-carousel-prev
+                aria-label="Ver proyecto anterior"
+            >
+                <svg viewBox="0 0 24 24" class="size-5 fill-none stroke-current" aria-hidden="true">
+                    <path d="m15 18-6-6 6-6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+            </button>
+            <button
+                type="button"
+                class="inline-flex size-11 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition hover:border-purple-400 hover:bg-purple-500/15 hover:text-purple-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 motion-reduce:transition-none"
+                data-carousel-next
+                aria-label="Ver proyecto siguiente"
+            >
+                <svg viewBox="0 0 24 24" class="size-5 fill-none stroke-current" aria-hidden="true">
+                    <path d="m9 18 6-6-6-6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div
+        class="project-carousel__viewport overflow-x-auto overscroll-x-contain rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#00010D]"
+        data-carousel-viewport
+        tabindex="0"
+        aria-label="Usa las flechas izquierda y derecha para cambiar de proyecto"
+    >
+        <ul class="m-0 flex list-none snap-x snap-mandatory p-0" data-carousel-track>
+        {
+            PROJECTS.map(({ title, description, link, image, images, tags, featured }, projectIndex) => (
+            <li
+                class="min-w-full snap-start"
+                data-carousel-slide
+                aria-label={`${projectIndex + 1} de ${PROJECTS.length}: ${title}`}
+            >
+            <article class={`h-full rounded-2xl border p-4 md:p-7 ${featured ? "border-yellow-400/30 bg-yellow-400/5" : "border-white/10 bg-white/[0.03]"}`}>
                 {featured && (
                     <div class="mb-4">
                         <span class="text-xs bg-yellow-400/20 text-yellow-400 px-3 py-1 rounded-full font-medium">
@@ -174,6 +222,132 @@ const PROJECTS = [
                     )}
                 </div>
             </article>
-        </div>
-    ))
-}
+            </li>
+            ))
+        }
+        </ul>
+    </div>
+
+    <div class="mt-5 flex items-center justify-center gap-2" aria-label="Seleccionar proyecto">
+        {PROJECTS.map((project, index) => (
+            <button
+                type="button"
+                class="h-2.5 w-2.5 rounded-full bg-white/25 transition-[width,background-color] duration-300 hover:bg-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#00010D] motion-reduce:transition-none"
+                data-carousel-dot
+                data-index={index}
+                aria-label={`Ir al proyecto ${index + 1}: ${project.title}`}
+            ></button>
+        ))}
+    </div>
+</section>
+
+<script>
+    const carousels = document.querySelectorAll<HTMLElement>('[data-project-carousel]');
+
+    carousels.forEach((carousel) => {
+        const viewport = carousel.querySelector<HTMLElement>('[data-carousel-viewport]');
+        const slides = Array.from(carousel.querySelectorAll<HTMLElement>('[data-carousel-slide]'));
+        const previousButton = carousel.querySelector<HTMLButtonElement>('[data-carousel-prev]');
+        const nextButton = carousel.querySelector<HTMLButtonElement>('[data-carousel-next]');
+        const currentLabel = carousel.querySelector<HTMLElement>('[data-carousel-current]');
+        const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>('[data-carousel-dot]'));
+
+        if (!viewport || !previousButton || !nextButton || !currentLabel || slides.length === 0) return;
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let currentIndex = 0;
+        let scrollFrame = 0;
+
+        const updateState = (index: number) => {
+            currentIndex = index;
+            currentLabel.textContent = String(index + 1).padStart(2, '0');
+
+            slides.forEach((slide, slideIndex) => {
+                slide.inert = slideIndex !== index;
+            });
+
+            dots.forEach((dot, dotIndex) => {
+                const isCurrent = dotIndex === index;
+                dot.setAttribute('aria-current', isCurrent ? 'true' : 'false');
+                dot.classList.toggle('w-8', isCurrent);
+                dot.classList.toggle('bg-purple-400', isCurrent);
+                dot.classList.toggle('bg-white/25', !isCurrent);
+            });
+        };
+
+        const goTo = (index: number) => {
+            const normalizedIndex = (index + slides.length) % slides.length;
+            updateState(normalizedIndex);
+            viewport.scrollTo({
+                left: slides[normalizedIndex].offsetLeft - slides[0].offsetLeft,
+                behavior: prefersReducedMotion.matches ? 'auto' : 'smooth'
+            });
+        };
+
+        const handleScroll = () => {
+            cancelAnimationFrame(scrollFrame);
+            scrollFrame = requestAnimationFrame(() => {
+                const closestIndex = slides.reduce((closest, slide, index) => {
+                    const firstSlideOffset = slides[0].offsetLeft;
+                    const currentDistance = Math.abs((slide.offsetLeft - firstSlideOffset) - viewport.scrollLeft);
+                    const closestDistance = Math.abs((slides[closest].offsetLeft - firstSlideOffset) - viewport.scrollLeft);
+                    return currentDistance < closestDistance ? index : closest;
+                }, 0);
+
+                if (closestIndex !== currentIndex) updateState(closestIndex);
+            });
+        };
+
+        const handlePrevious = () => goTo(currentIndex - 1);
+        const handleNext = () => goTo(currentIndex + 1);
+        const handleKeydown = (event: KeyboardEvent) => {
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                handlePrevious();
+            }
+
+            if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                handleNext();
+            }
+        };
+
+        previousButton.addEventListener('click', handlePrevious);
+        nextButton.addEventListener('click', handleNext);
+        viewport.addEventListener('scroll', handleScroll, { passive: true });
+        viewport.addEventListener('keydown', handleKeydown);
+        dots.forEach((dot, index) => dot.addEventListener('click', () => goTo(index)));
+
+        const resizeObserver = new ResizeObserver(() => {
+            viewport.scrollTo({
+                left: slides[currentIndex].offsetLeft - slides[0].offsetLeft,
+                behavior: 'auto'
+            });
+        });
+        resizeObserver.observe(viewport);
+
+        updateState(0);
+
+        const cleanup = () => {
+            cancelAnimationFrame(scrollFrame);
+            resizeObserver.disconnect();
+            previousButton.removeEventListener('click', handlePrevious);
+            nextButton.removeEventListener('click', handleNext);
+            viewport.removeEventListener('scroll', handleScroll);
+            viewport.removeEventListener('keydown', handleKeydown);
+        };
+
+        window.addEventListener('pagehide', cleanup, { once: true });
+        document.addEventListener('astro:before-swap', cleanup, { once: true });
+    });
+</script>
+
+<style>
+    .project-carousel__viewport {
+        scrollbar-width: none;
+    }
+
+    .project-carousel__viewport::-webkit-scrollbar {
+        display: none;
+    }
+</style>
